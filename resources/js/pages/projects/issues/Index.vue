@@ -106,7 +106,7 @@ function sortIcon(key: string) {
     <Head :title="`${project.name} - Issues`" />
 
     <div class="mx-auto w-full max-w-6xl space-y-6 p-6">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <Heading
                 :title="project.name"
                 description="Issues"

@@ -107,7 +107,7 @@ const errorTone = (errors: number): SignalTone => (errors > 0 ? 'bad' : 'good');
     <Head title="Projects" />
 
     <div class="mx-auto w-full max-w-6xl space-y-6 p-6">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <Heading
                 title="Projects"
                 description="Every Laravel app you're watching, one panel each."

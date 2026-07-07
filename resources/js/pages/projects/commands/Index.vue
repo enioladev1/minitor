@@ -133,13 +133,13 @@ function sortIcon(key: string) {
     <Head :title="`${project.name} - Commands`" />
 
     <div class="mx-auto w-full max-w-6xl space-y-6 p-6">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <Heading
                 :title="project.name"
                 description="Commands"
                 variant="small"
             />
-            <div class="flex items-center gap-2">
+            <div class="flex flex-wrap items-center gap-2">
                 <TimeRangeSelector
                     :model-value="range"
                     @update:model-value="setRange"
@@ -150,7 +150,7 @@ function sortIcon(key: string) {
 
         <div class="grid gap-4 lg:grid-cols-2">
             <div class="rounded-lg border p-4">
-                <div class="mb-3 flex items-start justify-between text-xs">
+                <div class="mb-3 flex flex-wrap items-start justify-between gap-y-2 text-xs">
                     <div>
                         <p class="text-muted-foreground">CALLS</p>
                         <p class="font-mono text-xl text-foreground">
@@ -182,7 +182,7 @@ function sortIcon(key: string) {
             </div>
 
             <div class="rounded-lg border p-4">
-                <div class="mb-3 flex items-start justify-between text-xs">
+                <div class="mb-3 flex flex-wrap items-start justify-between gap-y-2 text-xs">
                     <div>
                         <p class="text-muted-foreground">DURATION</p>
                         <p class="font-mono text-xl text-foreground">
@@ -227,7 +227,7 @@ function sortIcon(key: string) {
             </div>
         </div>
 
-        <div class="flex items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center justify-between gap-3">
             <p class="flex items-center gap-2 text-lg font-semibold">
                 <HugeiconsIcon
                     :icon="Terminal"

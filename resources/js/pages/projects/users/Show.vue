@@ -253,7 +253,7 @@ const userFilterParams = { user: props.user.external_id };
             </div>
 
             <div class="rounded-lg border p-4">
-                <div class="mb-3 flex items-start justify-between text-xs">
+                <div class="mb-3 flex flex-wrap items-start justify-between gap-y-2 text-xs">
                     <div>
                         <p class="text-muted-foreground">REQUESTS</p>
                         <p class="font-mono text-xl text-foreground">

@@ -129,9 +129,9 @@ function setRange(range: string) {
     <Head :title="project.name" />
 
     <div class="mx-auto w-full max-w-6xl space-y-6 p-6">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <Heading :title="project.name" variant="small" />
-            <div class="flex items-center gap-2">
+            <div class="flex flex-wrap items-center gap-2">
                 <TimeRangeSelector
                     :model-value="range"
                     @update:model-value="setRange"
@@ -153,7 +153,7 @@ function setRange(range: string) {
             </CardHeader>
             <CardContent class="grid gap-4 lg:grid-cols-2">
                 <div class="rounded-lg border p-4">
-                    <div class="mb-3 flex items-start justify-between text-xs">
+                    <div class="mb-3 flex flex-wrap items-start justify-between gap-y-2 text-xs">
                         <div>
                             <p class="text-muted-foreground">REQUESTS</p>
                             <p class="font-mono text-xl text-foreground">
@@ -200,7 +200,7 @@ function setRange(range: string) {
                 </div>
 
                 <div class="rounded-lg border p-4">
-                    <div class="mb-3 flex items-start justify-between text-xs">
+                    <div class="mb-3 flex flex-wrap items-start justify-between gap-y-2 text-xs">
                         <div>
                             <p class="text-muted-foreground">DURATION</p>
                             <p class="font-mono text-xl text-foreground">
@@ -278,7 +278,7 @@ function setRange(range: string) {
                 </div>
 
                 <div class="rounded-lg border p-4">
-                    <div class="mb-3 flex items-start justify-between text-xs">
+                    <div class="mb-3 flex flex-wrap items-start justify-between gap-y-2 text-xs">
                         <p class="text-muted-foreground">JOBS</p>
                         <div class="flex gap-4 text-right">
                             <div>

@@ -70,7 +70,7 @@ function setLevel(level: string | undefined) {
     <Head :title="`${project.name} - Logs`" />
 
     <div class="mx-auto w-full max-w-6xl space-y-6 p-6">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <Heading :title="project.name" description="Logs" variant="small" />
             <ProjectSettingsDialog :project="project" />
         </div>
