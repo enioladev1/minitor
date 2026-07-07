@@ -14,8 +14,7 @@ class ProjectOverviewController extends Controller
 {
     public function __invoke(Project $project, Request $request): Response
     {
-        $rangeKey = $request->string('range')->toString();
-        $rangeKey = TimeRange::isValid($rangeKey) ? $rangeKey : '7d';
+        $rangeKey = TimeRange::resolve($request);
         $range = new TimeRange($rangeKey);
 
         $requestsQuery = $project->requests()->where('occurred_at', '>=', $range->since);

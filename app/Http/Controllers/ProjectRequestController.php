@@ -19,8 +19,7 @@ class ProjectRequestController extends Controller
      */
     public function index(Request $request, Project $project): Response
     {
-        $rangeKey = $request->string('range')->toString();
-        $rangeKey = TimeRange::isValid($rangeKey) ? $rangeKey : '7d';
+        $rangeKey = TimeRange::resolve($request);
         $range = new TimeRange($rangeKey);
         $userFilter = $request->string('user')->toString() ?: null;
 
@@ -94,8 +93,7 @@ class ProjectRequestController extends Controller
         $method = $request->string('method')->toString();
         $path = $request->string('path')->toString();
 
-        $rangeKey = $request->string('range')->toString();
-        $rangeKey = TimeRange::isValid($rangeKey) ? $rangeKey : '7d';
+        $rangeKey = TimeRange::resolve($request);
         $range = new TimeRange($rangeKey);
         $userFilter = $request->string('user')->toString() ?: null;
 

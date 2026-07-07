@@ -85,6 +85,17 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_logout_clears_the_remembered_time_range_cookie()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)
+            ->withCookie('minitor_range', '30d')
+            ->post(route('logout'));
+
+        $response->assertCookieExpired('minitor_range');
+    }
+
     public function test_users_are_rate_limited()
     {
         $user = User::factory()->create();

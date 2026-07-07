@@ -20,8 +20,7 @@ class ProjectOutgoingRequestController extends Controller
      */
     public function index(Request $request, Project $project): Response
     {
-        $rangeKey = $request->string('range')->toString();
-        $rangeKey = TimeRange::isValid($rangeKey) ? $rangeKey : '7d';
+        $rangeKey = TimeRange::resolve($request);
         $range = new TimeRange($rangeKey);
 
         $scoped = $project->outgoingRequests()->where('occurred_at', '>=', $range->since);
@@ -77,8 +76,7 @@ class ProjectOutgoingRequestController extends Controller
     {
         $host = $request->string('host')->toString();
 
-        $rangeKey = $request->string('range')->toString();
-        $rangeKey = TimeRange::isValid($rangeKey) ? $rangeKey : '7d';
+        $rangeKey = TimeRange::resolve($request);
         $range = new TimeRange($rangeKey);
 
         $scoped = $project->outgoingRequests()

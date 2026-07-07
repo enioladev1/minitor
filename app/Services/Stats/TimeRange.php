@@ -3,7 +3,9 @@
 namespace App\Services\Stats;
 
 use Carbon\CarbonInterface;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cookie;
 
 /**
  * Maps a dashboard time-range key to a lookback window and a bucket size,
@@ -21,6 +23,8 @@ final class TimeRange
         '30d' => ['hours' => 24 * 30, 'bucket_seconds' => 86_400],    // 1-day buckets
     ];
 
+    private const COOKIE = 'minitor_range';
+
     public readonly CarbonInterface $since;
 
     public readonly int $bucketSeconds;
@@ -36,6 +40,28 @@ final class TimeRange
     public static function isValid(string $key): bool
     {
         return isset(self::RANGES[$key]);
+    }
+
+    /**
+     * Resolves the range key to use for this request: an explicit `?range=`
+     * query param wins (and is remembered for a year via cookie so every
+     * other page defaults to it too), otherwise falls back to the
+     * previously remembered range, otherwise '1h'.
+     */
+    public static function resolve(Request $request): string
+    {
+        $requested = $request->string('range')->toString();
+
+        if (self::isValid($requested)) {
+            Cookie::queue(self::COOKIE, $requested, 60 * 24 * 365);
+
+            return $requested;
+        }
+
+        $remembered = $request->cookie(self::COOKIE);
+        $remembered = is_string($remembered) ? $remembered : '';
+
+        return self::isValid($remembered) ? $remembered : '1h';
     }
 
     /**

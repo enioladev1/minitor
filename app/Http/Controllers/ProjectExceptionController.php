@@ -25,8 +25,7 @@ class ProjectExceptionController extends Controller
      */
     public function index(Request $request, Project $project): Response
     {
-        $rangeKey = $request->string('range')->toString();
-        $rangeKey = TimeRange::isValid($rangeKey) ? $rangeKey : '7d';
+        $rangeKey = TimeRange::resolve($request);
         $range = new TimeRange($rangeKey);
         $userFilter = $request->string('user')->toString() ?: null;
 
@@ -114,8 +113,7 @@ class ProjectExceptionController extends Controller
     {
         abort_unless($issue->project_id === $project->id, 404);
 
-        $rangeKey = $request->string('range')->toString();
-        $rangeKey = TimeRange::isValid($rangeKey) ? $rangeKey : '7d';
+        $rangeKey = TimeRange::resolve($request);
         $range = new TimeRange($rangeKey);
         $userFilter = $request->string('user')->toString() ?: null;
 

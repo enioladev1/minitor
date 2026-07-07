@@ -20,8 +20,7 @@ class ProjectScheduledTaskController extends Controller
      */
     public function index(Request $request, Project $project): Response
     {
-        $rangeKey = $request->string('range')->toString();
-        $rangeKey = TimeRange::isValid($rangeKey) ? $rangeKey : '7d';
+        $rangeKey = TimeRange::resolve($request);
         $range = new TimeRange($rangeKey);
 
         $scoped = $project->scheduledTasks()->where('occurred_at', '>=', $range->since);
@@ -85,8 +84,7 @@ class ProjectScheduledTaskController extends Controller
         $timezone = $request->string('timezone')->toString() ?: null;
         $repeatSeconds = $request->integer('repeat_seconds');
 
-        $rangeKey = $request->string('range')->toString();
-        $rangeKey = TimeRange::isValid($rangeKey) ? $rangeKey : '7d';
+        $rangeKey = TimeRange::resolve($request);
         $range = new TimeRange($rangeKey);
 
         $scoped = $project->scheduledTasks()

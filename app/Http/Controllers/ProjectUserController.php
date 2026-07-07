@@ -21,8 +21,7 @@ class ProjectUserController extends Controller
      */
     public function index(Request $request, Project $project): Response
     {
-        $rangeKey = $request->string('range')->toString();
-        $rangeKey = TimeRange::isValid($rangeKey) ? $rangeKey : '7d';
+        $rangeKey = TimeRange::resolve($request);
         $range = new TimeRange($rangeKey);
 
         $requestsScoped = $project->requests()->where('occurred_at', '>=', $range->since);
@@ -117,8 +116,7 @@ class ProjectUserController extends Controller
     {
         $user = MonitoredUser::where('project_id', $project->id)->where('external_id', $externalId)->firstOrFail();
 
-        $rangeKey = $request->string('range')->toString();
-        $rangeKey = TimeRange::isValid($rangeKey) ? $rangeKey : '7d';
+        $rangeKey = TimeRange::resolve($request);
         $range = new TimeRange($rangeKey);
 
         $scoped = $project->requests()
