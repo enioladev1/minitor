@@ -175,9 +175,8 @@ const errorTone = (errors: number): SignalTone => (errors > 0 ? 'bad' : 'good');
             <p class="text-sm font-medium">No projects yet</p>
             <p class="mx-auto mt-1 max-w-sm text-sm text-muted-foreground">
                 Create one to get a token you can paste into a monitored app's
-                <code class="font-mono text-xs">NIGHTWATCH_TOKEN</code>. Its
-                vitals will start appearing here the moment the first request
-                comes in.
+                configuration. Its vitals will start appearing here the moment
+                the first request comes in.
             </p>
         </div>
 
