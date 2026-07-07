@@ -50,7 +50,7 @@ components:
    ```bash
    git clone https://github.com/enioladev1/minitor.git
    cd minitor
-   cp .env.docker.example .env   # fill in APP_KEY (instructions inside the file)
+   cp .env.docker.example .env   # fill in APP_KEY, APP_URL & DB_PASSWORD (instructions inside the file)
    docker compose up -d
    ```
 
@@ -136,11 +136,6 @@ MINITOR keeps the official instrumentation as-is and replaces only the
 closed pieces, so teams that want to self-host can, without giving up
 Laravel's own telemetry code.
 
-## Data retention
-
-MVP does not yet prune old data automatically - plan for periodic cleanup
-of the `requests` / `queries` / `exceptions` tables if running for a long
-time at real traffic volume.
 
 ## License
 
