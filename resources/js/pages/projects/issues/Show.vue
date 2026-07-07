@@ -306,7 +306,7 @@ function setStatus(status: string) {
                     <CardContent class="space-y-4">
                         <div class="text-sm text-muted-foreground">
                             <span class="font-medium text-foreground"
-                                >Nightwatch</span
+                                >MINITOR</span
                             >
                             created the issue &middot;
                             {{ formatRelative(issue.first_seen_at) }}
