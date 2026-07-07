@@ -1,6 +1,10 @@
+<p align="center">
+  <img src="public/images/logo.png" alt="MINITOR" width="300">
+</p>
+
 # MINITOR
 
-An open-source, self-hosted alternative to [Laravel Nightwatch](https://nightwatch.laravel.com).
+An open-source, self-hosted alternative to Laravel Nightwatch.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 

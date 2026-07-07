@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Settings\BackupController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\SecurityController;
 use Illuminate\Auth\Middleware\RequirePassword;
@@ -22,4 +23,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('user-password.update');
 
     Route::inertia('settings/appearance', 'settings/Appearance')->name('appearance.edit');
+
+    Route::get('settings/backups', [BackupController::class, 'edit'])->name('backups.edit');
+    Route::put('settings/backups', [BackupController::class, 'update'])->name('backups.update');
+    Route::post('settings/backups/test-connection', [BackupController::class, 'testConnection'])->name('backups.test-connection');
+    Route::post('settings/backups/run', [BackupController::class, 'run'])->name('backups.run');
 });
