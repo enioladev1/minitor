@@ -20,6 +20,7 @@ import StackTrace from '@/components/StackTrace.vue';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
+import { buildExceptionMarkdown } from '@/lib/exceptionMarkdown';
 import { formatDateTime, formatRelative } from '@/lib/signal';
 import { cn, paginationLabel } from '@/lib/utils';
 
@@ -49,11 +50,41 @@ const props = defineProps<{
     };
     latestOccurrence: {
         message: string | null;
+        code: string | null;
         handled: boolean;
         trace: string | null;
         php_version: string | null;
         laravel_version: string | null;
+        occurred_at: string;
+        execution_source: string | null;
     } | null;
+    latestOccurrenceContext: {
+        source_request: {
+            method: string;
+            url: string;
+            route_name: string | null;
+            status_code: number;
+            ip: string | null;
+        } | null;
+        authenticated_user: {
+            external_id: string;
+            name: string | null;
+            username: string | null;
+        } | null;
+        queries: Array<{
+            sql: string;
+            duration_us: number;
+            connection: string | null;
+        }>;
+        logs: Array<{
+            level: string;
+            message: string | null;
+            occurred_at: string;
+        }>;
+    } | null;
+    impactedUsers: number;
+    occurrences7d: number;
+    occurrences24h: number;
     occurrences: PaginatedOccurrences;
     events: Array<{
         id: number;
@@ -73,18 +104,29 @@ defineOptions({
 
 const { copy, copied } = useClipboard();
 
-const markdown = computed(() => {
-    const o = props.latestOccurrence;
-
-    return (
-        `## ${props.issue.class}\n\n` +
-        `${o?.message ?? ''}\n\n` +
-        `- File: \`${props.issue.file}:${props.issue.line}\`\n` +
-        `- Laravel: ${o?.laravel_version ?? '—'}\n` +
-        `- PHP: ${o?.php_version ?? '—'}\n` +
-        `- ${o?.handled ? 'Handled' : 'Unhandled'}\n`
-    );
-});
+const markdown = computed(() =>
+    buildExceptionMarkdown({
+        class: props.issue.class,
+        file: props.issue.file,
+        line: props.issue.line,
+        message: props.latestOccurrence?.message ?? null,
+        code: props.latestOccurrence?.code ?? null,
+        handled: props.latestOccurrence?.handled ?? false,
+        trace: props.latestOccurrence?.trace ?? null,
+        occurredAt: props.latestOccurrence?.occurred_at ?? null,
+        executionSource: props.latestOccurrence?.execution_source ?? null,
+        sourceRequest: props.latestOccurrenceContext?.source_request ?? null,
+        authenticatedUser:
+            props.latestOccurrenceContext?.authenticated_user ?? null,
+        queries: props.latestOccurrenceContext?.queries ?? [],
+        logs: props.latestOccurrenceContext?.logs ?? [],
+        firstSeenAt: props.issue.first_seen_at,
+        lastSeenAt: props.issue.last_seen_at,
+        occurrences24h: props.occurrences24h,
+        occurrences7d: props.occurrences7d,
+        impactedUsers: props.impactedUsers,
+    }),
+);
 
 function setStatus(status: string) {
     router.patch(

@@ -3,6 +3,7 @@ import {
     ArrowDown01Icon as ArrowDown,
     ArrowUp01Icon as ArrowUp,
     ArrowUpDownIcon as ArrowUpDown,
+    ExternalLinkIcon as ExternalLink,
     Search01Icon as Search,
     TerminalIcon as Terminal,
 } from '@hugeicons/core-free-icons';
@@ -100,12 +101,12 @@ function setRange(range: string) {
 }
 
 const sortColumns = [
-    { key: 'name', label: 'Command' },
-    { key: 'success', label: 'Success' },
-    { key: 'failed', label: 'Failed' },
-    { key: 'total', label: 'Total' },
-    { key: 'avg', label: 'Avg' },
-    { key: 'p95', label: 'P95' },
+    { key: 'name', label: 'Command', align: 'left' },
+    { key: 'success', label: 'Success', align: 'right' },
+    { key: 'failed', label: 'Failed', align: 'right' },
+    { key: 'total', label: 'Total', align: 'right' },
+    { key: 'avg', label: 'Avg', align: 'right' },
+    { key: 'p95', label: 'P95', align: 'right' },
 ] as const;
 
 const sortState = ref<{ sort?: string; direction?: string }>({});
@@ -248,7 +249,7 @@ function sortIcon(key: string) {
         </div>
 
         <Card>
-            <CardContent class="p-0">
+            <CardContent class="overflow-x-auto p-0">
                 <table class="w-full text-sm">
                     <thead>
                         <tr
@@ -258,10 +259,12 @@ function sortIcon(key: string) {
                                 v-for="col in sortColumns"
                                 :key="col.key"
                                 class="py-2 pr-4 pl-4 font-normal first:pl-4"
+                                :class="col.align === 'right' ? 'text-right' : ''"
                             >
                                 <button
                                     type="button"
                                     class="inline-flex items-center gap-1 hover:text-foreground"
+                                    :class="col.align === 'right' ? 'justify-end' : ''"
                                     @click="toggleSort(col.key)"
                                 >
                                     {{ col.label }}
@@ -271,13 +274,21 @@ function sortIcon(key: string) {
                                     />
                                 </button>
                             </th>
+                            <th class="w-8"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr
                             v-for="command in commands"
                             :key="command.name"
-                            class="border-b last:border-b-0 hover:bg-muted/50"
+                            class="cursor-pointer border-b last:border-b-0 hover:bg-muted/50"
+                            @click="
+                                router.visit(
+                                    commandShow(project.id, {
+                                        query: { name: command.name },
+                                    }),
+                                )
+                            "
                         >
                             <td class="py-3 pr-4 pl-4">
                                 <Link
@@ -287,6 +298,7 @@ function sortIcon(key: string) {
                                         })
                                     "
                                     class="font-mono text-xs"
+                                    @click.stop
                                 >
                                     {{ command.name }}
                                 </Link>
@@ -321,11 +333,26 @@ function sortIcon(key: string) {
                             >
                                 {{ formatDuration(command.p95_us) }}
                             </td>
+                            <td class="py-3 pr-4 text-right">
+                                <Link
+                                    :href="
+                                        commandShow(project.id, {
+                                            query: { name: command.name },
+                                        })
+                                    "
+                                    @click.stop
+                                >
+                                    <HugeiconsIcon
+                                        :icon="ExternalLink"
+                                        class="size-3.5 text-muted-foreground"
+                                    />
+                                </Link>
+                            </td>
                         </tr>
                         <tr v-if="commands.length === 0">
                             <td
                                 class="p-4 text-sm text-muted-foreground"
-                                colspan="6"
+                                colspan="7"
                             >
                                 No commands recorded yet.
                             </td>

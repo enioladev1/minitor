@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Issue;
 use App\Models\IssueEvent;
 use App\Models\Project;
+use App\Services\Exceptions\ExceptionContext;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -68,10 +69,20 @@ class ProjectIssueController extends Controller
 
         $latestOccurrence = $issue->occurrences()->orderByDesc('occurred_at')->first();
 
+        $impactedUsers = (int) $issue->occurrences()->distinct('user_external_id')->whereNotNull('user_external_id')->count('user_external_id');
+        $occurrences7d = $issue->occurrences()->where('occurred_at', '>=', now()->subDays(7))->count();
+        $occurrences24h = $issue->occurrences()->where('occurred_at', '>=', now()->subHours(24))->count();
+
         return Inertia::render('projects/issues/Show', [
             'project' => $project,
             'issue' => $issue,
             'latestOccurrence' => $latestOccurrence,
+            'latestOccurrenceContext' => $latestOccurrence
+                ? ExceptionContext::build($project, $latestOccurrence)
+                : null,
+            'impactedUsers' => $impactedUsers,
+            'occurrences7d' => $occurrences7d,
+            'occurrences24h' => $occurrences24h,
             'occurrences' => $issue->occurrences()->orderByDesc('occurred_at')->paginate(25),
             'events' => $issue->events()->with('user:id,name')->orderBy('created_at')->get(),
         ]);

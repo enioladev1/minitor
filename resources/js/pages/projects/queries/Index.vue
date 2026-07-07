@@ -4,6 +4,7 @@ import {
     ArrowUp01Icon as ArrowUp,
     ArrowUpDownIcon as ArrowUpDown,
     Database01Icon as Database,
+    ExternalLinkIcon as ExternalLink,
     Search01Icon as Search,
 } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/vue';
@@ -96,12 +97,12 @@ function setRange(range: string) {
 }
 
 const sortColumns = [
-    { key: 'query', label: 'Query' },
-    { key: 'connection', label: 'Connection' },
-    { key: 'calls', label: 'Calls' },
-    { key: 'total', label: 'Total' },
-    { key: 'avg', label: 'Avg' },
-    { key: 'p95', label: 'P95' },
+    { key: 'query', label: 'Query', align: 'left' },
+    { key: 'connection', label: 'Connection', align: 'left' },
+    { key: 'calls', label: 'Calls', align: 'right' },
+    { key: 'total', label: 'Total', align: 'right' },
+    { key: 'avg', label: 'Avg', align: 'right' },
+    { key: 'p95', label: 'P95', align: 'right' },
 ] as const;
 
 const sortState = ref<{ sort?: string; direction?: string }>({});
@@ -230,7 +231,7 @@ function sortIcon(key: string) {
         </div>
 
         <Card>
-            <CardContent class="p-0">
+            <CardContent class="overflow-x-auto p-0">
                 <table class="w-full text-sm">
                     <thead>
                         <tr
@@ -240,10 +241,12 @@ function sortIcon(key: string) {
                                 v-for="col in sortColumns"
                                 :key="col.key"
                                 class="py-2 pr-4 pl-4 font-normal first:pl-4"
+                                :class="col.align === 'right' ? 'text-right' : ''"
                             >
                                 <button
                                     type="button"
                                     class="inline-flex items-center gap-1 hover:text-foreground"
+                                    :class="col.align === 'right' ? 'justify-end' : ''"
                                     @click="toggleSort(col.key)"
                                 >
                                     {{ col.label }}
@@ -253,13 +256,21 @@ function sortIcon(key: string) {
                                     />
                                 </button>
                             </th>
+                            <th class="w-8"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr
                             v-for="row in queries"
                             :key="row.group_key"
-                            class="border-b last:border-b-0 hover:bg-muted/50"
+                            class="cursor-pointer border-b last:border-b-0 hover:bg-muted/50"
+                            @click="
+                                router.visit(
+                                    queryShow(project.id, {
+                                        query: { group: row.group_key },
+                                    }),
+                                )
+                            "
                         >
                             <td class="py-3 pr-4 pl-4">
                                 <Link
@@ -269,6 +280,7 @@ function sortIcon(key: string) {
                                         })
                                     "
                                     class="block max-w-lg truncate font-mono text-xs"
+                                    @click.stop
                                 >
                                     {{ row.sql }}
                                 </Link>
@@ -318,11 +330,26 @@ function sortIcon(key: string) {
                             >
                                 {{ formatDuration(row.p95_us) }}
                             </td>
+                            <td class="py-3 pr-4 text-right">
+                                <Link
+                                    :href="
+                                        queryShow(project.id, {
+                                            query: { group: row.group_key },
+                                        })
+                                    "
+                                    @click.stop
+                                >
+                                    <HugeiconsIcon
+                                        :icon="ExternalLink"
+                                        class="size-3.5 text-muted-foreground"
+                                    />
+                                </Link>
+                            </td>
                         </tr>
                         <tr v-if="queries.length === 0">
                             <td
                                 class="p-4 text-sm text-muted-foreground"
-                                colspan="6"
+                                colspan="7"
                             >
                                 No queries recorded yet.
                             </td>

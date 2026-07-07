@@ -121,14 +121,14 @@ function setUser(user: string | undefined) {
 }
 
 const sortColumns = [
-    { key: 'method', label: 'Method' },
-    { key: 'path', label: 'Path' },
-    { key: 'success', label: '1/2/3XX' },
-    { key: 'client_error', label: '4XX' },
-    { key: 'server_error', label: '5XX' },
-    { key: 'total', label: 'Total' },
-    { key: 'avg', label: 'Avg' },
-    { key: 'p95', label: 'P95' },
+    { key: 'method', label: 'Method', align: 'left' },
+    { key: 'path', label: 'Path', align: 'left' },
+    { key: 'success', label: '1/2/3XX', align: 'right' },
+    { key: 'client_error', label: '4XX', align: 'right' },
+    { key: 'server_error', label: '5XX', align: 'right' },
+    { key: 'total', label: 'Total', align: 'right' },
+    { key: 'avg', label: 'Avg', align: 'right' },
+    { key: 'p95', label: 'P95', align: 'right' },
 ] as const;
 
 const sortState = ref<{ sort?: string; direction?: string }>({});
@@ -287,7 +287,7 @@ function sortIcon(key: string) {
         </div>
 
         <Card>
-            <CardContent class="p-0">
+            <CardContent class="overflow-x-auto p-0">
                 <table class="w-full text-sm">
                     <thead>
                         <tr
@@ -297,10 +297,12 @@ function sortIcon(key: string) {
                                 v-for="col in sortColumns"
                                 :key="col.key"
                                 class="py-2 pr-4 pl-4 font-normal first:pl-4"
+                                :class="col.align === 'right' ? 'text-right' : ''"
                             >
                                 <button
                                     type="button"
                                     class="inline-flex items-center gap-1 hover:text-foreground"
+                                    :class="col.align === 'right' ? 'justify-end' : ''"
                                     @click="toggleSort(col.key)"
                                 >
                                     {{ col.label }}
@@ -317,7 +319,17 @@ function sortIcon(key: string) {
                         <tr
                             v-for="route in routes.data"
                             :key="`${route.method}-${route.path}`"
-                            class="border-b last:border-b-0 hover:bg-muted/50"
+                            class="cursor-pointer border-b last:border-b-0 hover:bg-muted/50"
+                            @click="
+                                router.visit(
+                                    routeShow(project.id, {
+                                        query: {
+                                            method: route.method,
+                                            path: route.path,
+                                        },
+                                    }),
+                                )
+                            "
                         >
                             <td class="py-3 pr-4 pl-4 font-mono text-xs">
                                 {{ route.method }}
@@ -333,6 +345,7 @@ function sortIcon(key: string) {
                                         })
                                     "
                                     class="font-mono text-xs"
+                                    @click.stop
                                 >
                                     {{ route.path }}
                                 </Link>
@@ -385,6 +398,7 @@ function sortIcon(key: string) {
                                             },
                                         })
                                     "
+                                    @click.stop
                                 >
                                     <HugeiconsIcon
                                         :icon="ExternalLink"

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Issue;
 use App\Models\MinitorRequest;
 use App\Models\Project;
+use App\Services\Exceptions\ExceptionContext;
 use App\Services\Stats\ExceptionStats;
 use App\Services\Stats\RequestStats;
 use App\Services\Stats\TimeRange;
@@ -155,6 +156,9 @@ class ProjectExceptionController extends Controller
             'project' => $project,
             'issue' => $issue,
             'latestOccurrence' => $latestOccurrence,
+            'latestOccurrenceContext' => $latestOccurrence
+                ? ExceptionContext::build($project, $latestOccurrence)
+                : null,
             'range' => $rangeKey,
             'filters' => $request->only(['user', 'range']),
             'occurrenceSeries' => ExceptionStats::occurrenceSeries($scoped, $range),

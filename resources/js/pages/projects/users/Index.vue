@@ -3,6 +3,7 @@ import {
     ArrowDown01Icon as ArrowDown,
     ArrowUp01Icon as ArrowUp,
     ArrowUpDownIcon as ArrowUpDown,
+    ExternalLinkIcon as ExternalLink,
     Search01Icon as Search,
     UserMultipleIcon as UsersIcon,
 } from '@hugeicons/core-free-icons';
@@ -215,7 +216,7 @@ function sortIcon(key: string) {
         </div>
 
         <Card>
-            <CardContent class="p-0">
+            <CardContent class="overflow-x-auto p-0">
                 <table class="w-full text-sm">
                     <thead>
                         <tr
@@ -239,18 +240,25 @@ function sortIcon(key: string) {
                                     />
                                 </button>
                             </th>
+                            <th class="w-8"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr
                             v-for="user in users"
                             :key="user.external_id"
-                            class="border-b last:border-b-0 hover:bg-muted/50"
+                            class="cursor-pointer border-b last:border-b-0 hover:bg-muted/50"
+                            @click="
+                                router.visit(
+                                    show([project.id, user.external_id]),
+                                )
+                            "
                         >
                             <td class="py-3 pr-4 pl-4">
                                 <Link
                                     :href="show([project.id, user.external_id])"
                                     class="flex items-center gap-2 font-mono text-xs"
+                                    @click.stop
                                 >
                                     <span class="text-muted-foreground">{{
                                         user.external_id
@@ -304,11 +312,22 @@ function sortIcon(key: string) {
                             >
                                 {{ formatRelative(user.last_seen_at) }}
                             </td>
+                            <td class="py-3 pr-4 text-right">
+                                <Link
+                                    :href="show([project.id, user.external_id])"
+                                    @click.stop
+                                >
+                                    <HugeiconsIcon
+                                        :icon="ExternalLink"
+                                        class="size-3.5 text-muted-foreground"
+                                    />
+                                </Link>
+                            </td>
                         </tr>
                         <tr v-if="users.length === 0">
                             <td
                                 class="p-4 text-sm text-muted-foreground"
-                                colspan="8"
+                                colspan="9"
                             >
                                 No users identified yet.
                             </td>

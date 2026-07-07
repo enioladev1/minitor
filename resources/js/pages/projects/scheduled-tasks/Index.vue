@@ -4,6 +4,7 @@ import {
     ArrowUp01Icon as ArrowUp,
     ArrowUpDownIcon as ArrowUpDown,
     Calendar01Icon as Calendar,
+    ExternalLinkIcon as ExternalLink,
     Search01Icon as Search,
 } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/vue';
@@ -272,7 +273,7 @@ function taskLink(task: (typeof props.tasks)[number]) {
         </div>
 
         <Card>
-            <CardContent class="p-0">
+            <CardContent class="overflow-x-auto p-0">
                 <table class="w-full text-sm">
                     <thead>
                         <tr
@@ -296,11 +297,11 @@ function taskLink(task: (typeof props.tasks)[number]) {
                             <th
                                 v-for="col in sortColumns.slice(1)"
                                 :key="col.key"
-                                class="py-2 pr-4 font-normal"
+                                class="py-2 pr-4 text-right font-normal"
                             >
                                 <button
                                     type="button"
-                                    class="inline-flex items-center gap-1 hover:text-foreground"
+                                    class="inline-flex items-center justify-end gap-1 hover:text-foreground"
                                     @click="toggleSort(col.key)"
                                 >
                                     {{ col.label }}
@@ -310,18 +311,21 @@ function taskLink(task: (typeof props.tasks)[number]) {
                                     />
                                 </button>
                             </th>
+                            <th class="w-8"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr
                             v-for="task in tasks"
                             :key="`${task.name}-${task.cron}-${task.repeat_seconds}`"
-                            class="border-b last:border-b-0 hover:bg-muted/50"
+                            class="cursor-pointer border-b last:border-b-0 hover:bg-muted/50"
+                            @click="router.visit(taskLink(task))"
                         >
                             <td class="py-3 pr-4 pl-4">
                                 <Link
                                     :href="taskLink(task)"
                                     class="block max-w-xs truncate font-mono text-xs"
+                                    @click.stop
                                     >{{ task.name }}</Link
                                 >
                             </td>
@@ -371,11 +375,19 @@ function taskLink(task: (typeof props.tasks)[number]) {
                             >
                                 {{ formatDuration(task.p95_us) }}
                             </td>
+                            <td class="py-3 pr-4 text-right">
+                                <Link :href="taskLink(task)" @click.stop>
+                                    <HugeiconsIcon
+                                        :icon="ExternalLink"
+                                        class="size-3.5 text-muted-foreground"
+                                    />
+                                </Link>
+                            </td>
                         </tr>
                         <tr v-if="tasks.length === 0">
                             <td
                                 class="p-4 text-sm text-muted-foreground"
-                                colspan="9"
+                                colspan="10"
                             >
                                 No scheduled tasks recorded yet.
                             </td>

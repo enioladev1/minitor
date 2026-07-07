@@ -419,7 +419,7 @@ const userFilterParams = { user: props.user.external_id };
         </div>
 
         <Card>
-            <CardContent class="p-0">
+            <CardContent class="overflow-x-auto p-0">
                 <table class="w-full text-sm">
                     <thead>
                         <tr

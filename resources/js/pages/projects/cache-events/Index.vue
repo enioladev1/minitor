@@ -4,6 +4,7 @@ import {
     ArrowUp01Icon as ArrowUp,
     ArrowUpDownIcon as ArrowUpDown,
     Database01Icon as Database,
+    ExternalLinkIcon as ExternalLink,
 } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/vue';
 import { Head, Link, router } from '@inertiajs/vue3';
@@ -245,7 +246,7 @@ function formatHitRate(rate: number | null): string {
         </p>
 
         <Card>
-            <CardContent class="p-0">
+            <CardContent class="overflow-x-auto p-0">
                 <table class="w-full text-sm">
                     <thead>
                         <tr
@@ -269,13 +270,24 @@ function formatHitRate(rate: number | null): string {
                                     />
                                 </button>
                             </th>
+                            <th class="w-8"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr
                             v-for="row in keys"
                             :key="`${row.store}-${row.key}`"
-                            class="border-b last:border-b-0 hover:bg-muted/50"
+                            class="cursor-pointer border-b last:border-b-0 hover:bg-muted/50"
+                            @click="
+                                router.visit(
+                                    keyShow(project.id, {
+                                        query: {
+                                            store: row.store ?? '',
+                                            key: row.key ?? '',
+                                        },
+                                    }),
+                                )
+                            "
                         >
                             <td class="py-3 pr-4 pl-4">
                                 <Link
@@ -288,6 +300,7 @@ function formatHitRate(rate: number | null): string {
                                         })
                                     "
                                     class="block max-w-md truncate font-mono text-xs"
+                                    @click.stop
                                 >
                                     {{ row.key || '—' }}
                                 </Link>
@@ -318,11 +331,29 @@ function formatHitRate(rate: number | null): string {
                             <td class="py-3 pr-4 text-right font-mono text-xs">
                                 {{ row.total }}
                             </td>
+                            <td class="py-3 pr-4 text-right">
+                                <Link
+                                    :href="
+                                        keyShow(project.id, {
+                                            query: {
+                                                store: row.store ?? '',
+                                                key: row.key ?? '',
+                                            },
+                                        })
+                                    "
+                                    @click.stop
+                                >
+                                    <HugeiconsIcon
+                                        :icon="ExternalLink"
+                                        class="size-3.5 text-muted-foreground"
+                                    />
+                                </Link>
+                            </td>
                         </tr>
                         <tr v-if="keys.length === 0">
                             <td
                                 class="p-4 text-sm text-muted-foreground"
-                                colspan="8"
+                                colspan="9"
                             >
                                 No cache events recorded yet.
                             </td>
