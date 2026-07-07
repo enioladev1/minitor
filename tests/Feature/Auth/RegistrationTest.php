@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Fortify\Features;
 use Tests\TestCase;
@@ -35,5 +36,30 @@ class RegistrationTest extends TestCase
 
         $this->assertAuthenticated();
         $response->assertRedirect(route('dashboard', absolute: false));
+    }
+
+    public function test_registration_screen_redirects_to_login_once_an_admin_exists()
+    {
+        User::factory()->create();
+
+        $response = $this->get(route('register'));
+
+        $response->assertRedirect(route('login'));
+    }
+
+    public function test_registration_is_blocked_once_an_admin_exists()
+    {
+        User::factory()->create();
+
+        $response = $this->post(route('register.store'), [
+            'name' => 'Second User',
+            'email' => 'second@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+
+        $response->assertSessionHasErrors('email');
+        $this->assertGuest();
+        $this->assertSame(1, User::query()->count());
     }
 }

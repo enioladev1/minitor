@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Carbon;
 
 /**
- * Bucketed/aggregate exception-occurrence stats, mirroring RequestStats —
+ * Bucketed/aggregate exception-occurrence stats, mirroring RequestStats -
  * exceptions have no duration, so this only tracks handled/unhandled counts.
  */
 final class ExceptionStats

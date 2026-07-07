@@ -8,7 +8,7 @@ use Illuminate\Support\Carbon;
 
 /**
  * Bucketed/aggregate scheduled-task-run+duration stats, mirroring
- * JobStats/CommandStats — a run's status is one of processed/skipped/failed.
+ * JobStats/CommandStats - a run's status is one of processed/skipped/failed.
  */
 final class ScheduledTaskStats
 {

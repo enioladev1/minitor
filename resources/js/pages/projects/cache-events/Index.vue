@@ -134,12 +134,12 @@ function sortIcon(key: string) {
 }
 
 function formatHitRate(rate: number | null): string {
-    return rate === null ? '—' : `${rate}%`;
+    return rate === null ? '-' : `${rate}%`;
 }
 </script>
 
 <template>
-    <Head :title="`${project.name} — Cache`" />
+    <Head :title="`${project.name} - Cache`" />
 
     <div class="mx-auto w-full max-w-6xl space-y-6 p-6">
         <div class="flex items-center justify-between">
@@ -302,7 +302,7 @@ function formatHitRate(rate: number | null): string {
                                     class="block max-w-md truncate font-mono text-xs"
                                     @click.stop
                                 >
-                                    {{ row.key || '—' }}
+                                    {{ row.key || '-' }}
                                 </Link>
                             </td>
                             <td class="py-3 pr-4 text-right font-mono text-xs">

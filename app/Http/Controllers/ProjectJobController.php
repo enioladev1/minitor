@@ -14,7 +14,7 @@ class ProjectJobController extends Controller
 {
     /**
      * The jobs directory: every distinct job class the project has seen,
-     * with aggregate queued/processed/released/failed counts and timings —
+     * with aggregate queued/processed/released/failed counts and timings -
      * the project-wide "Jobs" landing page, not a raw per-attempt feed.
      */
     public function index(Request $request, Project $project): Response

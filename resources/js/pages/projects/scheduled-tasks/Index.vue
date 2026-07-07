@@ -155,7 +155,7 @@ function taskLink(task: (typeof props.tasks)[number]) {
 </script>
 
 <template>
-    <Head :title="`${project.name} — Scheduled Tasks`" />
+    <Head :title="`${project.name} - Scheduled Tasks`" />
 
     <div class="mx-auto w-full max-w-6xl space-y-6 p-6">
         <div class="flex items-center justify-between">
@@ -338,7 +338,7 @@ function taskLink(task: (typeof props.tasks)[number]) {
                                 {{
                                     task.next_run
                                         ? formatCountdown(task.next_run)
-                                        : '—'
+                                        : '-'
                                 }}
                             </td>
                             <td class="py-3 pr-4 text-right font-mono text-xs">

@@ -130,7 +130,7 @@ function sortIcon(key: string) {
 </script>
 
 <template>
-    <Head :title="`${project.name} — Commands`" />
+    <Head :title="`${project.name} - Commands`" />
 
     <div class="mx-auto w-full max-w-6xl space-y-6 p-6">
         <div class="flex items-center justify-between">

@@ -13,7 +13,7 @@ class ProjectOutgoingRequestController extends Controller
 {
     /**
      * The outgoing-requests directory: every distinct host the project has
-     * called out to, with aggregate status-class counts and timings — the
+     * called out to, with aggregate status-class counts and timings - the
      * project-wide "Outgoing Requests" landing page, not a raw per-call feed.
      * Reuses RequestStats since outgoing calls have the same status_code +
      * duration_us shape as inbound requests.

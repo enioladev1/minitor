@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Carbon;
 
 /**
- * Bucketed/aggregate cache-event stats, mirroring RequestStats — a cache
+ * Bucketed/aggregate cache-event stats, mirroring RequestStats - a cache
  * event's `type` is one of hit/miss/write/delete/write-failure/delete-failure,
  * so this tracks both the event mix and the failure mix separately (they're
  * shown as two distinct charts, same as the real Nightwatch Cache page).

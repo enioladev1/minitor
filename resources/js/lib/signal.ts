@@ -1,5 +1,5 @@
 /**
- * MINITOR's signature signal system: the same three tones — good, warn, bad —
+ * MINITOR's signature signal system: the same three tones - good, warn, bad -
  * mean the same thing everywhere data is shown (a request's status, a
  * query's duration, a job's outcome), so health reads at a glance without
  * reading a single number. Keep every new table/detail view using these

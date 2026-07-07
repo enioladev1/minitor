@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('deploy')->nullable();
             $table->string('trace_id')->nullable();
             // The monitored app's own user id (from Nightwatch's `user` field),
-            // if a user resolver is configured there — null means guest/unauthenticated.
+            // if a user resolver is configured there - null means guest/unauthenticated.
             $table->string('user_external_id')->nullable();
             $table->timestamp('occurred_at');
 

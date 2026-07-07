@@ -14,7 +14,7 @@ class ProjectRequestController extends Controller
 {
     /**
      * The routes directory: every distinct method+path the project has seen,
-     * with aggregate counts/timings — the project-wide "Requests" landing
+     * with aggregate counts/timings - the project-wide "Requests" landing
      * page, not a raw per-request feed.
      */
     public function index(Request $request, Project $project): Response

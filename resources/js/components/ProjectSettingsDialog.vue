@@ -46,7 +46,7 @@ const envSnippet = computed(
 function confirmRegenerate() {
     if (
         confirm(
-            "Regenerate this project's key? The old key will stop working immediately — update every app using it.",
+            "Regenerate this project's key? The old key will stop working immediately - update every app using it.",
         )
     ) {
         router.post(
@@ -106,7 +106,7 @@ function confirmDelete() {
                                 Add these to its .env
                             </p>
                             <p class="text-sm text-muted-foreground">
-                                Both values are generated for this project —
+                                Both values are generated for this project -
                                 nothing to invent.
                             </p>
                             <CodeSnippet :text="envSnippet" />

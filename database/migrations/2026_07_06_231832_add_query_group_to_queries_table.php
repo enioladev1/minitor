@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::table('queries', function (Blueprint $table) {
             // A stable grouping key computed at ingest time by collapsing
             // variable-length `in (...)` clauses, so e.g. a 3-value and a
-            // 5-value IN clause of the same query group together — mirrors
+            // 5-value IN clause of the same query group together - mirrors
             // Nightwatch's own `_group` hash for queries.
             $table->text('query_group')->nullable()->after('sql');
             $table->index(['project_id', 'query_group']);

@@ -22,7 +22,7 @@ use Illuminate\Support\Carbon;
 /**
  * Persists decoded laravel/nightwatch records (already validated/authenticated
  * by IngestController) into project-scoped storage. Each record carries a
- * `t` discriminator field identifying its shape — see minitor/agent's
+ * `t` discriminator field identifying its shape - see minitor/agent's
  * README for where these field names come from.
  */
 class RecordIngestor
@@ -86,7 +86,7 @@ class RecordIngestor
             'sql' => (string) ($record['sql'] ?? ''),
             // Nightwatch already collapses variable-length `in (...)` clauses
             // and bulk insert value lists into this hash before it ever
-            // reaches us — reuse it directly rather than recomputing our own,
+            // reaches us - reuse it directly rather than recomputing our own,
             // same as we do for exception fingerprints.
             'query_group' => isset($record['_group']) ? (string) $record['_group'] : null,
             'file' => $record['file'] ?? null,
@@ -133,7 +133,7 @@ class RecordIngestor
                 'last_seen_at' => $occurredAt->greaterThan($issue->last_seen_at) ? $occurredAt : $issue->last_seen_at,
             ])->save();
 
-            // A resolved issue recurring means it wasn't actually fixed —
+            // A resolved issue recurring means it wasn't actually fixed -
             // reopen it, same as Sentry/Bugsnag. An ignored issue is a
             // deliberate, ongoing suppression, so it stays ignored.
             if ($issue->status === 'resolved') {
@@ -319,7 +319,7 @@ class RecordIngestor
 
     /**
      * Nightwatch's `user` field is whatever the monitored app's configured
-     * user resolver returns as an id (via Nightwatch::user(...)) — absent or
+     * user resolver returns as an id (via Nightwatch::user(...)) - absent or
      * null means the request/exception was unauthenticated ("guest").
      *
      * @param  array<string, mixed>  $record

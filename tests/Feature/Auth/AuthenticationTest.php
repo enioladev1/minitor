@@ -14,9 +14,18 @@ class AuthenticationTest extends TestCase
 
     public function test_login_screen_can_be_rendered()
     {
+        User::factory()->create();
+
         $response = $this->get(route('login'));
 
         $response->assertOk();
+    }
+
+    public function test_login_screen_redirects_to_registration_when_no_admin_exists_yet()
+    {
+        $response = $this->get(route('login'));
+
+        $response->assertRedirect(route('register'));
     }
 
     public function test_users_can_authenticate_using_the_login_screen()

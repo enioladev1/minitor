@@ -2,12 +2,10 @@
 import { Form, Head } from '@inertiajs/vue3';
 import InputError from '@/components/InputError.vue';
 import PasswordInput from '@/components/PasswordInput.vue';
-import TextLink from '@/components/TextLink.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import { login } from '@/routes';
 import { store } from '@/routes/register';
 
 defineProps<{
@@ -16,14 +14,15 @@ defineProps<{
 
 defineOptions({
     layout: {
-        title: 'Create an account',
-        description: 'Enter your details below to create your account',
+        title: 'Create your admin account',
+        description:
+            'This is a one-time setup - MINITOR is self-hosted and only supports a single admin account.',
     },
 });
 </script>
 
 <template>
-    <Head title="Register" />
+    <Head title="Set up MINITOR" />
 
     <Form
         v-bind="store.form()"
@@ -97,18 +96,8 @@ defineOptions({
                 data-test="register-user-button"
             >
                 <Spinner v-if="processing" />
-                Create account
+                Create admin account
             </Button>
-        </div>
-
-        <div class="text-center text-sm text-muted-foreground">
-            Already have an account?
-            <TextLink
-                :href="login()"
-                class="underline underline-offset-4"
-                :tabindex="6"
-                >Log in</TextLink
-            >
         </div>
     </Form>
 </template>

@@ -193,7 +193,7 @@ const userFilterParams = { user: props.user.external_id };
                             class="mb-1 flex-1 border-b border-dotted border-muted-foreground/30"
                         ></span>
                         <dd class="font-mono text-xs">
-                            {{ user.username || user.name || '—' }}
+                            {{ user.username || user.name || '-' }}
                         </dd>
                     </div>
                     <div class="flex items-baseline gap-2">

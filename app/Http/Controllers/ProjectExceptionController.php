@@ -21,7 +21,7 @@ class ProjectExceptionController extends Controller
      * class+code+file+line, same fingerprint the Issues workflow uses) that
      * occurred within the selected window, with occurrence/impacted-user
      * counts and a handled/unhandled classification from its latest
-     * occurrence — the project-wide "Exceptions" landing page.
+     * occurrence - the project-wide "Exceptions" landing page.
      */
     public function index(Request $request, Project $project): Response
     {
@@ -107,7 +107,7 @@ class ProjectExceptionController extends Controller
     /**
      * Drill into a single exception issue: lifetime identity stats,
      * occurrence chart scoped to the selected range, the latest stack
-     * trace, and every individual occurrence — linked back to its
+     * trace, and every individual occurrence - linked back to its
      * originating request where the trace correlates to one we ingested.
      */
     public function show(Request $request, Project $project, Issue $issue): Response

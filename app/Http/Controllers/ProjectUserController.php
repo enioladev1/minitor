@@ -16,7 +16,7 @@ class ProjectUserController extends Controller
     /**
      * The users directory: every distinct user the project's requests,
      * jobs, and exceptions have identified within the selected window,
-     * with per-user activity counts — the project-wide "Users" landing
+     * with per-user activity counts - the project-wide "Users" landing
      * page, not a raw per-record feed.
      */
     public function index(Request $request, Project $project): Response
@@ -109,7 +109,7 @@ class ProjectUserController extends Controller
 
     /**
      * Drill into a single user: their request activity chart, top/slowest
-     * routes, and every individual request — with links out to the
+     * routes, and every individual request - with links out to the
      * user-filtered Requests/Jobs/Exceptions pages for the rest of their
      * activity.
      */

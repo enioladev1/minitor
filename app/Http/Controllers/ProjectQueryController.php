@@ -17,7 +17,7 @@ class ProjectQueryController extends Controller
      * The queries directory: every distinct query shape the project has
      * run (grouped by Nightwatch's own `_group` hash, which collapses
      * variable-length `in (...)` clauses and bulk insert value lists), with
-     * aggregate call counts and timings — the project-wide "Queries"
+     * aggregate call counts and timings - the project-wide "Queries"
      * landing page, not a raw per-call feed.
      */
     public function index(Request $request, Project $project): Response

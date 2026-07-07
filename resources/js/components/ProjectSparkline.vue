@@ -4,7 +4,7 @@ import { useChartHover } from '@/composables/useChartHover';
 import { formatBucketDateTime, formatCompactNumber } from '@/lib/signal';
 
 /**
- * A chrome-free "vitals strip" for the projects list — the same bucketed
+ * A chrome-free "vitals strip" for the projects list - the same bucketed
  * request-volume data every detail page charts, just stripped of axes and
  * gridlines so a dozen of these can sit in a card grid without turning into
  * a wall of noise. Still keeps the hover crosshair: a glance chart is still

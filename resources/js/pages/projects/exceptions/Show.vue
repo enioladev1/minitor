@@ -232,7 +232,7 @@ function setUser(user: string | undefined) {
                             class="mb-1 flex-1 border-b border-dotted border-muted-foreground/30"
                         ></span>
                         <dd class="font-mono text-xs">
-                            {{ phpVersions.join(', ') || '—' }}
+                            {{ phpVersions.join(', ') || '-' }}
                         </dd>
                     </div>
                     <div class="flex items-baseline gap-2">
@@ -245,7 +245,7 @@ function setUser(user: string | undefined) {
                             class="mb-1 flex-1 border-b border-dotted border-muted-foreground/30"
                         ></span>
                         <dd class="font-mono text-xs">
-                            {{ laravelVersions.join(', ') || '—' }}
+                            {{ laravelVersions.join(', ') || '-' }}
                         </dd>
                     </div>
                     <div class="flex items-baseline gap-2">
@@ -289,7 +289,7 @@ function setUser(user: string | undefined) {
                             class="mb-1 flex-1 border-b border-dotted border-muted-foreground/30"
                         ></span>
                         <dd class="font-mono text-xs">
-                            {{ servers.join(', ') || '—' }}
+                            {{ servers.join(', ') || '-' }}
                         </dd>
                     </div>
                 </dl>
@@ -429,7 +429,7 @@ function setUser(user: string | undefined) {
                                 <span
                                     v-else
                                     class="text-xs text-muted-foreground"
-                                    >—</span
+                                    >-</span
                                 >
                             </td>
                             <td class="max-w-md truncate py-2 pr-4 text-xs">
@@ -438,7 +438,7 @@ function setUser(user: string | undefined) {
                             <td
                                 class="py-2 pr-4 text-right font-mono text-xs text-muted-foreground"
                             >
-                                {{ occurrence.user_external_id ?? '—' }}
+                                {{ occurrence.user_external_id ?? '-' }}
                             </td>
                             <td class="py-2 pr-4 text-right">
                                 <Link

@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('project_id')->constrained()->cascadeOnDelete();
             // Nightwatch already computes a stable grouping hash per exception
             // (class + code + file + line) as the `_group` field on every
-            // exception record — we reuse it directly as our fingerprint
+            // exception record - we reuse it directly as our fingerprint
             // rather than recomputing our own.
             $table->string('fingerprint', 32);
             $table->string('class');

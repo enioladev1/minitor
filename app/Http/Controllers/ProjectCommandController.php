@@ -13,7 +13,7 @@ class ProjectCommandController extends Controller
 {
     /**
      * The commands directory: every distinct artisan command the project
-     * has run, with aggregate success/failure counts and timings — the
+     * has run, with aggregate success/failure counts and timings - the
      * project-wide "Commands" landing page, not a raw per-call feed.
      */
     public function index(Request $request, Project $project): Response

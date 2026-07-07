@@ -334,7 +334,7 @@ function setUser(user: string | undefined) {
                                 {{ formatDateTime(attempt.occurred_at) }}
                             </td>
                             <td class="py-2 pr-4 font-mono text-xs">
-                                {{ attempt.connection || '—' }}
+                                {{ attempt.connection || '-' }}
                             </td>
                             <td class="py-2 pr-4 font-mono text-xs">
                                 {{ attempt.queue || 'default' }}

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Carbon;
 
 /**
- * Bucketed/aggregate query-call+duration stats, mirroring RequestStats —
+ * Bucketed/aggregate query-call+duration stats, mirroring RequestStats -
  * queries have no success/failure state, just call volume and timing.
  */
 final class QueryStats

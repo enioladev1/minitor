@@ -352,7 +352,7 @@ function setRange(range: string) {
                                 <span
                                     v-else
                                     class="text-xs text-muted-foreground"
-                                    >—</span
+                                    >-</span
                                 >
                             </td>
                             <td class="py-2 pr-4 font-mono text-xs font-medium">

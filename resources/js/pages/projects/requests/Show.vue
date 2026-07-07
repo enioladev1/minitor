@@ -135,20 +135,20 @@ defineOptions({
 
                     <dt class="text-muted-foreground">Route name</dt>
                     <dd class="font-mono">
-                        {{ requestRecord.route_name || '—' }}
+                        {{ requestRecord.route_name || '-' }}
                     </dd>
 
                     <dt class="text-muted-foreground">Action</dt>
                     <dd class="font-mono break-all">
-                        {{ requestRecord.route_action || '—' }}
+                        {{ requestRecord.route_action || '-' }}
                     </dd>
 
                     <dt class="text-muted-foreground">IP</dt>
-                    <dd class="font-mono">{{ requestRecord.ip || '—' }}</dd>
+                    <dd class="font-mono">{{ requestRecord.ip || '-' }}</dd>
 
                     <dt class="text-muted-foreground">Trace ID</dt>
                     <dd class="font-mono">
-                        {{ requestRecord.trace_id || '—' }}
+                        {{ requestRecord.trace_id || '-' }}
                     </dd>
 
                     <dt class="text-muted-foreground">Occurred at</dt>

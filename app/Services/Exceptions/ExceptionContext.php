@@ -11,8 +11,8 @@ use App\Models\Query;
 
 /**
  * Correlates an exception occurrence back to the rest of what was captured
- * on the same trace_id — the HTTP request it happened during, the queries
- * that ran before it, and any log lines — so the "Copy as Markdown" export
+ * on the same trace_id - the HTTP request it happened during, the queries
+ * that ran before it, and any log lines - so the "Copy as Markdown" export
  * can include the same surrounding context Nightwatch's own export does.
  * We only surface fields this schema actually stores (no request headers or
  * payload capture exists here, unlike Nightwatch's hosted export).

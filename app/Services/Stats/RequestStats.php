@@ -8,7 +8,7 @@ use Illuminate\Support\Carbon;
 
 /**
  * Bucketed/aggregate request+duration stats, reused by both the project
- * Overview dashboard and the Requests pages — the only difference between
+ * Overview dashboard and the Requests pages - the only difference between
  * callers is which query they hand in (project-wide vs scoped to a route).
  *
  * Callers hand in either a plain Builder or an Eloquent relation (e.g.
@@ -19,7 +19,7 @@ final class RequestStats
 {
     /**
      * Scopes a requests query to "all", "authenticated", "guest", or one
-     * specific user's external id — the same filter used across every
+     * specific user's external id - the same filter used across every
      * Requests page's charts and tables.
      */
     public static function applyUserFilter(Builder|Relation $query, ?string $userFilter): Builder|Relation

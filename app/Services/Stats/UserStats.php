@@ -9,7 +9,7 @@ use Illuminate\Support\Carbon;
 /**
  * Bucketed stats for the project-wide Users page: how many distinct
  * authenticated users were active, and the authenticated/guest split of
- * all requests — both computed from the requests table's user_external_id.
+ * all requests - both computed from the requests table's user_external_id.
  */
 final class UserStats
 {

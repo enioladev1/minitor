@@ -129,7 +129,7 @@ const errorTone = (errors: number): SignalTone => (errors > 0 ? 'bad' : 'good');
                         <DialogHeader>
                             <DialogTitle>New project</DialogTitle>
                             <DialogDescription
-                                >Give it a name you'll recognize — usually the
+                                >Give it a name you'll recognize - usually the
                                 app it monitors.</DialogDescription
                             >
                         </DialogHeader>
@@ -224,7 +224,7 @@ const errorTone = (errors: number): SignalTone => (errors > 0 ? 'bad' : 'good');
                                         ? formatCompactNumber(
                                               project.activity_stats.total,
                                           )
-                                        : '—'
+                                        : '-'
                                 }}
                             </p>
                         </div>
@@ -253,7 +253,7 @@ const errorTone = (errors: number): SignalTone => (errors > 0 ? 'bad' : 'good');
                                                   project.activity_stats
                                                       .server_error,
                                           )
-                                        : '—'
+                                        : '-'
                                 }}
                             </p>
                         </div>
@@ -265,7 +265,7 @@ const errorTone = (errors: number): SignalTone => (errors > 0 ? 'bad' : 'good');
                                         ? formatDuration(
                                               project.activity_stats.p95_us,
                                           )
-                                        : '—'
+                                        : '-'
                                 }}
                             </p>
                         </div>

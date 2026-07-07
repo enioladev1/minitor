@@ -16,7 +16,7 @@ COPY . .
 RUN composer install --no-dev --no-interaction --no-progress --prefer-dist --optimize-autoloader
 
 # The Wayfinder Vite plugin shells out to `php artisan wayfinder:generate`
-# during `npm run build`, which needs a bootable app — this .env is only
+# during `npm run build`, which needs a bootable app - this .env is only
 # used for that build step and is removed before it reaches the runtime
 # image below.
 RUN cp .env.example .env && php artisan key:generate --ansi

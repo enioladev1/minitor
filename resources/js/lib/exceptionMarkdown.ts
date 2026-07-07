@@ -77,10 +77,10 @@ export function buildExceptionMarkdown(input: ExceptionMarkdownInput): string {
             '## Exception Summary',
             '',
             `- Class: \`${input.class}\``,
-            `- Message: \`${input.message ?? '—'}\``,
+            `- Message: \`${input.message ?? '-'}\``,
             `- Code: \`${input.code ?? '0'}\``,
             `- File: \`${input.file}:${input.line}\``,
-            `- Timestamp: \`${input.occurredAt ?? '—'}\``,
+            `- Timestamp: \`${input.occurredAt ?? '-'}\``,
             `- Details: ${contextDetails(input)}`,
         ].join('\n'),
     );
@@ -93,9 +93,9 @@ export function buildExceptionMarkdown(input: ExceptionMarkdownInput): string {
                 '',
                 `- Method: \`${r.method}\``,
                 `- URL: \`${r.url}\``,
-                `- Route: \`${r.route_name ?? '—'}\``,
+                `- Route: \`${r.route_name ?? '-'}\``,
                 `- Status code: \`${r.status_code}\``,
-                `- IP address: \`${r.ip ?? '—'}\``,
+                `- IP address: \`${r.ip ?? '-'}\``,
             ].join('\n'),
         );
     }
@@ -107,7 +107,7 @@ export function buildExceptionMarkdown(input: ExceptionMarkdownInput): string {
                 '### Authenticated User',
                 '',
                 `- ID: \`${u.external_id}\``,
-                `- Username: \`${u.username ?? u.name ?? '—'}\``,
+                `- Username: \`${u.username ?? u.name ?? '-'}\``,
             ].join('\n'),
         );
     }
@@ -134,7 +134,7 @@ export function buildExceptionMarkdown(input: ExceptionMarkdownInput): string {
                 '## Logs',
                 '',
                 ...input.logs.map(
-                    (l) => `- \`[${l.level}]\` ${l.message ?? '—'}`,
+                    (l) => `- \`[${l.level}]\` ${l.message ?? '-'}`,
                 ),
             ].join('\n'),
         );
@@ -147,7 +147,7 @@ export function buildExceptionMarkdown(input: ExceptionMarkdownInput): string {
     if (frames.length > 0) {
         const rows = frames.map(
             (frame, i) =>
-                `- [${i}] ${frame.source || '—'}\n    at ${frame.file}`,
+                `- [${i}] ${frame.source || '-'}\n    at ${frame.file}`,
         );
         sections.push(
             [

@@ -8,7 +8,7 @@ use Illuminate\Support\Carbon;
 
 /**
  * Bucketed/aggregate job-attempt+duration stats, reused by both the project
- * Overview dashboard and the Jobs pages — mirrors RequestStats but scoped to
+ * Overview dashboard and the Jobs pages - mirrors RequestStats but scoped to
  * job_attempts rows (processed/released/failed) instead of requests.
  */
 final class JobStats

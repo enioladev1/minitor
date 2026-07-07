@@ -15,7 +15,7 @@ class ProjectScheduledTaskController extends Controller
     /**
      * The scheduled-tasks directory: every distinct task the project's
      * scheduler has run, with aggregate processed/skipped/failed counts,
-     * timings, and its cron schedule/next-run time — the project-wide
+     * timings, and its cron schedule/next-run time - the project-wide
      * "Scheduled Tasks" landing page, not a raw per-run feed.
      */
     public function index(Request $request, Project $project): Response

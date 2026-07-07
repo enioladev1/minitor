@@ -8,7 +8,7 @@ use Illuminate\Support\Carbon;
 
 /**
  * Bucketed/aggregate artisan-command-call+duration stats, mirroring
- * RequestStats/JobStats — a call is "successful" when its exit code is 0.
+ * RequestStats/JobStats - a call is "successful" when its exit code is 0.
  */
 final class CommandStats
 {

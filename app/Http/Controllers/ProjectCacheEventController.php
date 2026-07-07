@@ -13,7 +13,7 @@ class ProjectCacheEventController extends Controller
 {
     /**
      * The top 100 cache keys directory: every distinct store+key the
-     * project has touched, with hit/miss/write/delete/failure counts —
+     * project has touched, with hit/miss/write/delete/failure counts -
      * the project-wide "Cache" landing page, not a raw per-event feed.
      */
     public function index(Request $request, Project $project): Response

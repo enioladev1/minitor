@@ -355,7 +355,7 @@ function setRange(range: string) {
                                 <span
                                     v-else
                                     class="text-xs text-muted-foreground"
-                                    >—</span
+                                    >-</span
                                 >
                             </td>
                             <td class="py-2 pr-4">
@@ -372,14 +372,14 @@ function setRange(range: string) {
                                 <span
                                     v-else
                                     class="text-xs text-muted-foreground"
-                                    >—</span
+                                    >-</span
                                 >
                             </td>
                             <td class="py-2 pr-4">
                                 <span
                                     class="inline-flex items-center gap-1.5 font-mono text-xs"
                                 >
-                                    {{ call.connection || '—' }}
+                                    {{ call.connection || '-' }}
                                     <span
                                         v-if="call.connection_type"
                                         class="rounded border px-1 py-0.5 text-[10px] uppercase"

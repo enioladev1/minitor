@@ -67,7 +67,7 @@ function setLevel(level: string | undefined) {
 </script>
 
 <template>
-    <Head :title="`${project.name} — Logs`" />
+    <Head :title="`${project.name} - Logs`" />
 
     <div class="mx-auto w-full max-w-6xl space-y-6 p-6">
         <div class="flex items-center justify-between">

@@ -298,7 +298,7 @@ function setRange(range: string) {
                                 {{ event.type }}
                             </td>
                             <td class="py-2 pr-4 text-right font-mono text-xs">
-                                {{ event.ttl > 0 ? `${event.ttl}s` : '—' }}
+                                {{ event.ttl > 0 ? `${event.ttl}s` : '-' }}
                             </td>
                             <td class="py-2 pr-4 text-right font-mono text-xs">
                                 {{ formatDuration(event.duration_us) }}

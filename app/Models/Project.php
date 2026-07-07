@@ -28,7 +28,7 @@ class Project extends Model
     }
 
     /**
-     * The value that goes into a monitored app's NIGHTWATCH_TOKEN — a local
+     * The value that goes into a monitored app's NIGHTWATCH_TOKEN - a local
      * handshake secret between the real laravel/nightwatch package and
      * minitor/agent on that same server. It's unrelated to $token (which
      * authenticates that server to us over the network); it's generated here

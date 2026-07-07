@@ -126,7 +126,7 @@ function sortIcon(key: string) {
 </script>
 
 <template>
-    <Head :title="`${project.name} — Queries`" />
+    <Head :title="`${project.name} - Queries`" />
 
     <div class="mx-auto w-full max-w-6xl space-y-6 p-6">
         <div class="flex items-center justify-between">
@@ -286,7 +286,7 @@ function sortIcon(key: string) {
                                 </Link>
                             </td>
                             <td class="py-3 pr-4 font-mono text-xs">
-                                {{ row.connection || '—' }}
+                                {{ row.connection || '-' }}
                             </td>
                             <td class="py-3 pr-4 text-right font-mono text-xs">
                                 {{ row.calls }}

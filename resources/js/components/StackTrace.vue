@@ -45,7 +45,7 @@ const rows = computed<Row[]>(() => {
         return [];
     }
 
-    // The first frame is the exception's own throw location — its file:line
+    // The first frame is the exception's own throw location - its file:line
     // is already shown in the issue header, so skip the redundant repeat.
     const working = frames.length > 1 ? frames.slice(1) : frames;
 
@@ -151,7 +151,7 @@ function codeLines(frame: Frame): Array<{ line: number; text: string }> {
                 >
                     <span
                         class="min-w-0 truncate font-mono text-muted-foreground"
-                        >{{ frame.source || '—' }}</span
+                        >{{ frame.source || '-' }}</span
                     >
                     <span class="shrink-0 font-mono text-muted-foreground/70">{{
                         frame.file
@@ -168,7 +168,7 @@ function codeLines(frame: Frame): Array<{ line: number; text: string }> {
                     @click="hasCode(row.frame) && toggle(row.key)"
                 >
                     <span class="min-w-0 truncate font-mono">{{
-                        row.frame.source || '—'
+                        row.frame.source || '-'
                     }}</span>
                     <span
                         class="flex shrink-0 items-center gap-2 font-mono text-muted-foreground"
