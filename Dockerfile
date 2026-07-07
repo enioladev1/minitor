@@ -25,15 +25,15 @@ RUN npm ci && npm run build
 
 FROM php:8.4-fpm
 
-# postgresql-client-16 (not Debian's default postgresql-client, which tracks
-# an older major) matches the postgres:16-alpine server in docker-compose.yml
+# postgresql-client-18 (not Debian's default postgresql-client, which tracks
+# an older major) matches the postgres:18-alpine server in docker-compose.yml
 # - pg_dump should never be older than the server it's dumping from.
 RUN apt-get update && apt-get install -y --no-install-recommends \
         libpq-dev nginx supervisor wget gnupg lsb-release \
     && docker-php-ext-install pdo_pgsql \
     && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql.gpg \
     && echo "deb [signed-by=/usr/share/keyrings/postgresql.gpg] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
-    && apt-get update && apt-get install -y --no-install-recommends postgresql-client-16 \
+    && apt-get update && apt-get install -y --no-install-recommends postgresql-client-18 \
     && apt-get purge -y wget gnupg lsb-release \
     && rm -rf /var/lib/apt/lists/*
 
