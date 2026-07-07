@@ -1,0 +1,42 @@
+services:
+  app:
+    build: .
+    ports:
+      - '${MINITOR_PORT:-8000}:80'
+    environment:
+      APP_NAME: MINITOR
+      APP_ENV: production
+      APP_KEY: ${APP_KEY}
+      APP_URL: ${APP_URL:-http://localhost:8000}
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: minitor
+      DB_USERNAME: minitor
+      DB_PASSWORD: ${DB_PASSWORD:-minitor}
+      SESSION_DRIVER: database
+      CACHE_STORE: database
+      QUEUE_CONNECTION: database
+      LOG_CHANNEL: stderr
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: minitor
+      POSTGRES_USER: minitor
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-minitor}
+    volumes:
+      - minitor-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U minitor']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  minitor-postgres-data:
