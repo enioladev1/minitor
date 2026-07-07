@@ -17,6 +17,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Behind Dokploy/Traefik the container only ever sees the proxy's
+        // internal address, not real client IPs - trust it so Laravel reads
+        // X-Forwarded-Proto and generates https:// URLs instead of http://.
+        $middleware->trustProxies(at: '*');
+
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
 
         $middleware->web(append: [
