@@ -40,3 +40,4 @@ services:
 
 volumes:
   minitor-postgres-data:
+    name: minitor-postgres-data
