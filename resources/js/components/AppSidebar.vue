@@ -2,6 +2,7 @@
 import {
     ArrowLeft01Icon as ArrowLeft,
     LayoutGridIcon as LayoutGrid,
+    Settings01Icon as Settings,
 } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
@@ -22,6 +23,7 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from '@/components/ui/sidebar';
+import { edit } from '@/routes/profile';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
@@ -29,6 +31,11 @@ const mainNavItems: NavItem[] = [
         title: 'Projects',
         href: ProjectController.index(),
         icon: LayoutGrid,
+    },
+    {
+        title: 'Settings',
+        href: edit(),
+        icon: Settings,
     },
 ];
 

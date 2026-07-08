@@ -12,6 +12,7 @@ import CodeSnippet from '@/components/CodeSnippet.vue';
 import InputError from '@/components/InputError.vue';
 import StepNumber from '@/components/StepNumber.vue';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
     Dialog,
     DialogContent,
@@ -30,6 +31,7 @@ const props = withDefaults(
             name: string;
             token: string;
             local_secret: string;
+            notify_on_new_issue: boolean;
         };
         defaultOpen?: boolean;
     }>(),
@@ -55,6 +57,14 @@ function confirmRegenerate() {
             { preserveScroll: true },
         );
     }
+}
+
+function toggleNotifyOnNewIssue(checked: boolean | 'indeterminate') {
+    router.patch(
+        update(props.project.id).url,
+        { name: props.project.name, notify_on_new_issue: checked === true },
+        { preserveScroll: true },
+    );
 }
 
 function confirmDelete() {
@@ -149,6 +159,24 @@ function confirmDelete() {
                         </div>
                         <InputError :message="errors.name" />
                     </Form>
+
+                    <div class="flex items-start gap-3">
+                        <Checkbox
+                            id="notify_on_new_issue"
+                            class="mt-1"
+                            :model-value="project.notify_on_new_issue"
+                            @update:model-value="toggleNotifyOnNewIssue"
+                        />
+                        <div class="space-y-1">
+                            <Label for="notify_on_new_issue"
+                                >Email me on new issues</Label
+                            >
+                            <p class="text-sm text-muted-foreground">
+                                Turn off to mute this project without
+                                touching your global notification settings.
+                            </p>
+                        </div>
+                    </div>
 
                     <div
                         class="space-y-2 rounded-md border border-destructive/30 p-3"

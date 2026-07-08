@@ -38,7 +38,7 @@ type PaginatedIssues = {
 };
 
 const props = defineProps<{
-    project: { id: number; name: string; token: string; local_secret: string };
+    project: { id: number; name: string; token: string; local_secret: string; notify_on_new_issue: boolean };
     issues: PaginatedIssues;
     filters: { q?: string; status?: string; sort?: string; direction?: string };
     counts: { open: number; resolved: number; ignored: number };

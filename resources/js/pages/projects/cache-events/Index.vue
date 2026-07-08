@@ -24,7 +24,7 @@ import { formatCompactNumber } from '@/lib/signal';
 type Bucket<T extends string> = { bucket: string } & Record<T, number>;
 
 const props = defineProps<{
-    project: { id: number; name: string; token: string; local_secret: string };
+    project: { id: number; name: string; token: string; local_secret: string; notify_on_new_issue: boolean };
     range: string;
     eventSeries: Bucket<'hits' | 'misses' | 'writes' | 'deletes'>[];
     failureSeries: Bucket<'write_failures' | 'delete_failures'>[];

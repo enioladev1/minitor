@@ -2,6 +2,7 @@
 
 namespace App\Services\Ingest;
 
+use App\Events\IssueCreated;
 use App\Models\AppCommand;
 use App\Models\CacheEvent;
 use App\Models\Issue;
@@ -126,6 +127,8 @@ class RecordIngestor
                 'first_seen_at' => $occurredAt,
                 'last_seen_at' => $occurredAt,
             ]);
+
+            event(new IssueCreated($issue));
         } else {
             $issue->increment('occurrences_count');
             $issue->forceFill([
@@ -145,6 +148,8 @@ class RecordIngestor
                     'type' => 'status_changed',
                     'meta' => ['from' => 'resolved', 'to' => 'open', 'reason' => 'recurred'],
                 ]);
+
+                event(new IssueCreated($issue, isReopen: true));
             }
         }
 

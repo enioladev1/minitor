@@ -12,7 +12,14 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'notify_on_new_issue'];
+
+    protected function casts(): array
+    {
+        return [
+            'notify_on_new_issue' => 'boolean',
+        ];
+    }
 
     protected static function booted(): void
     {

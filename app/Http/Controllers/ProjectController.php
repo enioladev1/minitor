@@ -57,6 +57,7 @@ class ProjectController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'notify_on_new_issue' => ['sometimes', 'boolean'],
         ]);
 
         $project->update($data);

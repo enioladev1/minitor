@@ -48,7 +48,7 @@ type PaginatedRoutes = {
 };
 
 const props = defineProps<{
-    project: { id: number; name: string; token: string; local_secret: string };
+    project: { id: number; name: string; token: string; local_secret: string; notify_on_new_issue: boolean };
     range: string;
     filters: { q?: string; user?: string };
     requestsSeries: Bucket<'success' | 'client_error' | 'server_error'>[];

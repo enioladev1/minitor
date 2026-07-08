@@ -22,7 +22,7 @@ type PaginatedLogs = {
 };
 
 const props = defineProps<{
-    project: { id: number; name: string; token: string; local_secret: string };
+    project: { id: number; name: string; token: string; local_secret: string; notify_on_new_issue: boolean };
     logs: PaginatedLogs;
     filters: { level?: string };
 }>();

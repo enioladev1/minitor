@@ -1,19 +1,14 @@
 <script setup lang="ts">
-import {
-    Logout01Icon as LogOut,
-    Settings01Icon as Settings,
-} from '@hugeicons/core-free-icons';
+import { Logout01Icon as LogOut } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/vue';
 import { Link, router } from '@inertiajs/vue3';
 import {
-    DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import UserInfo from '@/components/UserInfo.vue';
 import { logout } from '@/routes';
-import { edit } from '@/routes/profile';
 import type { User } from '@/types';
 
 type Props = {
@@ -33,15 +28,6 @@ defineProps<Props>();
             <UserInfo :user="user" :show-email="true" />
         </div>
     </DropdownMenuLabel>
-    <DropdownMenuSeparator />
-    <DropdownMenuGroup>
-        <DropdownMenuItem :as-child="true">
-            <Link class="block w-full cursor-pointer" :href="edit()" prefetch>
-                <HugeiconsIcon :icon="Settings" class="mr-2 h-4 w-4" />
-                Settings
-            </Link>
-        </DropdownMenuItem>
-    </DropdownMenuGroup>
     <DropdownMenuSeparator />
     <DropdownMenuItem :as-child="true">
         <Link

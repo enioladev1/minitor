@@ -33,7 +33,7 @@ import {
 type Bucket<T extends string> = { bucket: string } & Record<T, number>;
 
 const props = defineProps<{
-    project: { id: number; name: string; token: string; local_secret: string };
+    project: { id: number; name: string; token: string; local_secret: string; notify_on_new_issue: boolean };
     range: string;
     filters: { q?: string; user?: string };
     attemptsSeries: Bucket<'processed' | 'released' | 'failed'>[];

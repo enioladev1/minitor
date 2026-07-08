@@ -320,7 +320,7 @@ function setStatus(status: string) {
                             <template v-if="event.type === 'status_changed'">
                                 <span class="text-muted-foreground">
                                     <span class="font-medium text-foreground">{{
-                                        event.user?.name ?? 'System'
+                                        event.user?.name ?? 'MINITOR'
                                     }}</span>
                                     marked the issue as
                                     <span class="font-medium">{{
@@ -333,7 +333,7 @@ function setStatus(status: string) {
                             <template v-else>
                                 <p class="mb-1 text-muted-foreground">
                                     <span class="font-medium text-foreground">{{
-                                        event.user?.name ?? 'Someone'
+                                        event.user?.name ?? 'MINITOR'
                                     }}</span>
                                     commented &middot;
                                     {{ formatRelative(event.created_at) }}
