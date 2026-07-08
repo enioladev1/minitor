@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Head, useForm } from '@inertiajs/vue3';
-import { computed } from 'vue';
 import NotificationController from '@/actions/App/Http/Controllers/Settings/NotificationController';
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
@@ -15,6 +14,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { cn } from '@/lib/utils';
 import { formatDateTime } from '@/lib/signal';
 import { edit } from '@/routes/notifications';
 
@@ -77,16 +77,24 @@ const form = useForm({
     mailgun_endpoint: props.settings.mailgun_endpoint ?? 'api.mailgun.net',
 });
 
-const providerLabels: Record<string, string> = {
-    smtp: 'SMTP',
-    postmark: 'Postmark',
-    resend: 'Resend',
-    mailgun: 'Mailgun',
-};
-
-const selectedProviderLabel = computed(
-    () => providerLabels[form.provider] ?? 'Choose a provider',
-);
+const providerOptions = [
+    { value: 'smtp', label: 'SMTP', logo: '/images/email-providers/smtp.png' },
+    {
+        value: 'postmark',
+        label: 'Postmark',
+        logo: '/images/email-providers/postmark.jpeg',
+    },
+    {
+        value: 'resend',
+        label: 'Resend',
+        logo: '/images/email-providers/resend.svg',
+    },
+    {
+        value: 'mailgun',
+        label: 'Mailgun',
+        logo: '/images/email-providers/mailgun.png',
+    },
+] as const;
 
 function save() {
     form.put(NotificationController.update().url, { preserveScroll: true });
@@ -157,18 +165,38 @@ function sendTest() {
             <InputError :message="form.errors.enabled" />
 
             <div class="grid gap-2">
-                <Label for="provider">Provider</Label>
-                <Select v-model="form.provider">
-                    <SelectTrigger id="provider" class="w-full sm:w-64">
-                        <SelectValue :placeholder="selectedProviderLabel" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="smtp">SMTP</SelectItem>
-                        <SelectItem value="postmark">Postmark</SelectItem>
-                        <SelectItem value="resend">Resend</SelectItem>
-                        <SelectItem value="mailgun">Mailgun</SelectItem>
-                    </SelectContent>
-                </Select>
+                <Label>Provider</Label>
+                <div
+                    role="radiogroup"
+                    aria-label="Email provider"
+                    class="grid grid-cols-2 gap-3 sm:grid-cols-4"
+                >
+                    <button
+                        v-for="option in providerOptions"
+                        :key="option.value"
+                        type="button"
+                        role="radio"
+                        :aria-checked="form.provider === option.value"
+                        :class="
+                            cn(
+                                'flex flex-col items-center justify-center gap-2 rounded-lg border p-4 transition-colors hover:bg-accent',
+                                form.provider === option.value
+                                    ? 'border-primary ring-1 ring-primary'
+                                    : 'border-input',
+                            )
+                        "
+                        @click="form.provider = option.value"
+                    >
+                        <img
+                            :src="option.logo"
+                            :alt="option.label"
+                            class="h-8 w-8 object-contain"
+                        />
+                        <span class="text-sm font-medium">{{
+                            option.label
+                        }}</span>
+                    </button>
+                </div>
                 <InputError :message="form.errors.provider" />
             </div>
 
