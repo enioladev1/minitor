@@ -92,4 +92,39 @@ class PasswordResetTest extends TestCase
 
         $response->assertSessionHasErrors('email');
     }
+
+    public function test_reset_link_request_response_is_identical_for_unknown_email(): void
+    {
+        Notification::fake();
+
+        $user = User::factory()->create();
+
+        $knownEmailResponse = $this->post(route('password.email'), ['email' => $user->email]);
+        $unknownEmailResponse = $this->post(route('password.email'), ['email' => 'nobody@example.com']);
+
+        $knownEmailResponse->assertSessionHasNoErrors();
+        $unknownEmailResponse->assertSessionHasNoErrors();
+
+        $this->assertSame(
+            $knownEmailResponse->getSession()->get('status'),
+            $unknownEmailResponse->getSession()->get('status'),
+        );
+
+        Notification::assertSentTo($user, ResetPassword::class);
+    }
+
+    public function test_reset_link_requests_are_rate_limited(): void
+    {
+        Notification::fake();
+
+        $user = User::factory()->create();
+
+        for ($i = 0; $i < 5; $i++) {
+            $this->post(route('password.email'), ['email' => $user->email]);
+        }
+
+        $response = $this->post(route('password.email'), ['email' => $user->email]);
+
+        $response->assertStatus(429);
+    }
 }
