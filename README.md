@@ -89,7 +89,7 @@ Full agent install/config details:
 
 ## Run without Docker
 
-Requirements: PHP 8.3+, Composer, Node 20+, PostgreSQL 14+.
+Requirements: PHP 8.3+, Composer, Node 22+, PostgreSQL 14+.
 
 ```bash
 composer install
