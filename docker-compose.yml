@@ -30,12 +30,13 @@ services:
       POSTGRES_USER: minitor
       POSTGRES_PASSWORD: ${DB_PASSWORD:-minitor}
     volumes:
-      - minitor-postgres-data:/var/lib/postgresql/data
+      - minitor-postgres-data:/var/lib/postgresql
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U minitor']
       interval: 5s
       timeout: 5s
       retries: 10
+      start_period: 15s
     restart: unless-stopped
 
 volumes:
