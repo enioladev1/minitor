@@ -33,7 +33,7 @@ import {
     statusTone,
     toneClasses,
 } from '@/lib/signal';
-import { cn, paginationLabel } from '@/lib/utils';
+import { cn, paginationLabel, requestPath } from '@/lib/utils';
 
 type Bucket<T extends string> = { bucket: string } & Record<T, number>;
 
@@ -466,7 +466,7 @@ const userFilterParams = { user: props.user.external_id };
                                     "
                                     class="block max-w-md truncate font-mono text-xs"
                                 >
-                                    {{ request.route_path || request.url }}
+                                    {{ request.route_path || requestPath(request.url) }}
                                 </Link>
                             </td>
                             <td

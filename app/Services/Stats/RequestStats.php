@@ -18,6 +18,34 @@ use Illuminate\Support\Carbon;
 final class RequestStats
 {
     /**
+     * Synthetic method/path pair every request with no matched Laravel
+     * route collapses into when grouped - mirrors Nightwatch's own
+     * "Unmatched Route" bucket instead of grouping each raw URL on its own.
+     */
+    public const UNMATCHED_METHOD = 'ANY';
+
+    public const UNMATCHED_PATH = 'Unmatched Route';
+
+    /**
+     * Raw SQL expression yielding a route's grouping path: the matched
+     * route's path, or the shared "Unmatched Route" sentinel when the
+     * request never matched a route (route_path is null/empty).
+     */
+    public static function routePathExpr(): string
+    {
+        return "case when coalesce(route_path, '') = '' then '".self::UNMATCHED_PATH."' else route_path end";
+    }
+
+    /**
+     * Same idea as routePathExpr(), but for method - unmatched requests
+     * collapse regardless of their actual HTTP method.
+     */
+    public static function routeMethodExpr(): string
+    {
+        return "case when coalesce(route_path, '') = '' then '".self::UNMATCHED_METHOD."' else method end";
+    }
+
+    /**
      * Scopes a requests query to "all", "authenticated", "guest", or one
      * specific user's external id - the same filter used across every
      * Requests page's charts and tables.

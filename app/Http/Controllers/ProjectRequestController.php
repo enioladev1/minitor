@@ -28,19 +28,22 @@ class ProjectRequestController extends Controller
             $userFilter
         );
 
+        $pathExpr = RequestStats::routePathExpr();
+        $methodExpr = RequestStats::routeMethodExpr();
+
         $routesQuery = (clone $scoped)
-            ->selectRaw("coalesce(nullif(route_path, ''), url) as path")
-            ->selectRaw('method')
+            ->selectRaw("{$pathExpr} as path")
+            ->selectRaw("{$methodExpr} as method")
             ->selectRaw('count(*) as total')
             ->selectRaw('count(*) filter (where status_code < 400) as success')
             ->selectRaw('count(*) filter (where status_code >= 400 and status_code < 500) as client_error')
             ->selectRaw('count(*) filter (where status_code >= 500) as server_error')
             ->selectRaw('avg(duration_us) as avg_us')
             ->selectRaw('percentile_cont(0.95) within group (order by duration_us) as p95_us')
-            ->groupByRaw("coalesce(nullif(route_path, ''), url), method");
+            ->groupByRaw("{$pathExpr}, {$methodExpr}");
 
         if ($search = $request->string('q')->toString()) {
-            $routesQuery->havingRaw("coalesce(nullif(route_path, ''), url) like ?", ["%{$search}%"]);
+            $routesQuery->havingRaw("{$pathExpr} like ?", ["%{$search}%"]);
         }
 
         $sortMap = [
@@ -97,16 +100,15 @@ class ProjectRequestController extends Controller
         $range = new TimeRange($rangeKey);
         $userFilter = $request->string('user')->toString() ?: null;
 
-        $base = $project->requests()
-            ->where('occurred_at', '>=', $range->since)
-            ->where('method', $method)
-            ->where(function ($q) use ($path) {
-                $q->where('route_path', $path)->orWhere(function ($q2) use ($path) {
-                    $q2->where(function ($q3) {
-                        $q3->whereNull('route_path')->orWhere('route_path', '');
-                    })->where('url', $path);
-                });
+        $base = $project->requests()->where('occurred_at', '>=', $range->since);
+
+        if ($method === RequestStats::UNMATCHED_METHOD && $path === RequestStats::UNMATCHED_PATH) {
+            $base->where(function ($q) {
+                $q->whereNull('route_path')->orWhere('route_path', '');
             });
+        } else {
+            $base->where('method', $method)->where('route_path', $path);
+        }
 
         $scoped = RequestStats::applyUserFilter($base, $userFilter);
 

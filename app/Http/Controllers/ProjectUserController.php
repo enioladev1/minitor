@@ -149,11 +149,15 @@ class ProjectUserController extends Controller
             };
         }
 
+        $pathExpr = RequestStats::routePathExpr();
+        $methodExpr = RequestStats::routeMethodExpr();
+
         $routeGroups = (clone $scoped)
-            ->selectRaw("method, coalesce(nullif(route_path, ''), url) as path")
+            ->selectRaw("{$methodExpr} as method")
+            ->selectRaw("{$pathExpr} as path")
             ->selectRaw('count(*) as total')
             ->selectRaw('percentile_cont(0.95) within group (order by duration_us) as p95_us')
-            ->groupByRaw("method, coalesce(nullif(route_path, ''), url)")
+            ->groupByRaw("{$methodExpr}, {$pathExpr}")
             ->get();
 
         $topRoutes = $routeGroups->sortByDesc('total')->take(4)->values();

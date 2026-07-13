@@ -24,7 +24,7 @@ import {
     statusTone,
     toneClasses,
 } from '@/lib/signal';
-import { cn, paginationLabel } from '@/lib/utils';
+import { cn, paginationLabel, requestPath } from '@/lib/utils';
 
 type Bucket<T extends string> = { bucket: string } & Record<T, number>;
 
@@ -134,6 +134,9 @@ function setRange(range: string) {
 function setUser(user: string | undefined) {
     navigate({ user });
 }
+
+const isUnmatched =
+    props.method === 'ANY' && props.path === 'Unmatched Route';
 </script>
 
 <template>
@@ -151,6 +154,7 @@ function setUser(user: string | undefined) {
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <span
+                    v-if="!isUnmatched"
                     class="rounded-md bg-muted px-2 py-1 font-mono text-xs font-medium"
                     >{{ method }}</span
                 >
@@ -341,7 +345,7 @@ function setUser(user: string | undefined) {
                                     :href="show([project.id, request.id])"
                                     class="block max-w-md truncate font-mono text-xs"
                                 >
-                                    {{ request.route_path || request.url }}
+                                    {{ request.route_path || requestPath(request.url) }}
                                 </Link>
                             </td>
                             <td

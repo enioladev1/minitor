@@ -19,3 +19,18 @@ export function toUrl(href: NonNullable<InertiaLinkProps['href']>) {
 export function paginationLabel(label: string): string {
     return label.replace(/&laquo;/g, '‹').replace(/&raquo;/g, '›');
 }
+
+/**
+ * Requests are stored with their full URL (scheme + host included). When a
+ * request never matched a route and we fall back to displaying its raw URL,
+ * show just the path + query string, not the domain - matches how matched
+ * routes are already displayed.
+ */
+export function requestPath(url: string): string {
+    try {
+        const parsed = new URL(url);
+        return parsed.pathname + parsed.search;
+    } catch {
+        return url;
+    }
+}

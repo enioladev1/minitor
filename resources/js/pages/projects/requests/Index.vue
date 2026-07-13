@@ -4,6 +4,7 @@ import {
     ArrowUp01Icon as ArrowUp,
     ArrowUpDownIcon as ArrowUpDown,
     ExternalLinkIcon as ExternalLink,
+    Folder01Icon as Folder,
     GlobeIcon as Globe,
     Search01Icon as Search,
 } from '@hugeicons/core-free-icons';
@@ -99,6 +100,13 @@ const durationSeriesSpec = [
     },
     { key: 'p95_us' as const, label: 'P95', color: 'var(--color-signal-warn)' },
 ];
+
+const UNMATCHED_METHOD = 'ANY';
+const UNMATCHED_PATH = 'Unmatched Route';
+
+function isUnmatched(route: { method: string; path: string }) {
+    return route.method === UNMATCHED_METHOD && route.path === UNMATCHED_PATH;
+}
 
 const search = ref(props.filters.q ?? '');
 
@@ -331,7 +339,10 @@ function sortIcon(key: string) {
                                 )
                             "
                         >
-                            <td class="py-3 pr-4 pl-4 font-mono text-xs">
+                            <td
+                                class="py-3 pr-4 pl-4 font-mono text-xs"
+                                :class="isUnmatched(route) ? 'text-muted-foreground' : ''"
+                            >
                                 {{ route.method }}
                             </td>
                             <td class="py-3 pr-4">
@@ -344,9 +355,15 @@ function sortIcon(key: string) {
                                             },
                                         })
                                     "
-                                    class="font-mono text-xs"
+                                    class="inline-flex items-center gap-1.5 font-mono text-xs"
+                                    :class="isUnmatched(route) ? 'text-muted-foreground' : ''"
                                     @click.stop
                                 >
+                                    <HugeiconsIcon
+                                        v-if="isUnmatched(route)"
+                                        :icon="Folder"
+                                        class="size-3.5 text-muted-foreground"
+                                    />
                                     {{ route.path }}
                                 </Link>
                             </td>

@@ -15,6 +15,7 @@ import {
     statusTone,
     toneClasses,
 } from '@/lib/signal';
+import { requestPath } from '@/lib/utils';
 
 defineProps<{
     project: { id: number; name: string };
@@ -44,7 +45,7 @@ defineOptions({
 
 <template>
     <Head
-        :title="`${requestRecord.method} ${requestRecord.route_path || requestRecord.url}`"
+        :title="`${requestRecord.method} ${requestRecord.route_path || requestPath(requestRecord.url)}`"
     />
 
     <div class="mx-auto w-full max-w-6xl space-y-6 p-6">
@@ -63,7 +64,7 @@ defineOptions({
             />
             <Heading
                 variant="small"
-                :title="`${requestRecord.method} ${requestRecord.route_path || requestRecord.url}`"
+                :title="`${requestRecord.method} ${requestRecord.route_path || requestPath(requestRecord.url)}`"
             />
         </div>
 
