@@ -13,12 +13,16 @@ class Query extends Model
 
     protected $fillable = [
         'project_id', 'sql', 'query_group', 'file', 'line', 'duration_us',
-        'connection', 'connection_type', 'execution_source', 'trace_id', 'occurred_at',
+        'connection', 'connection_type', 'execution_source', 'execution_stage',
+        'trace_id', 'occurred_at',
     ];
 
     protected $casts = [
         'occurred_at' => 'datetime',
     ];
+
+    // See MinitorRequest::$dateFormat - needed for accurate Timeline offsets.
+    protected $dateFormat = 'Y-m-d H:i:s.u';
 
     public function project(): BelongsTo
     {

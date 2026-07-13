@@ -12,12 +12,16 @@ class CacheEvent extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'project_id', 'store', 'key', 'type', 'duration_us', 'ttl', 'trace_id', 'occurred_at',
+        'project_id', 'store', 'key', 'type', 'duration_us', 'ttl',
+        'execution_stage', 'trace_id', 'occurred_at',
     ];
 
     protected $casts = [
         'occurred_at' => 'datetime',
     ];
+
+    // See MinitorRequest::$dateFormat - needed for accurate Timeline offsets.
+    protected $dateFormat = 'Y-m-d H:i:s.u';
 
     public function project(): BelongsTo
     {

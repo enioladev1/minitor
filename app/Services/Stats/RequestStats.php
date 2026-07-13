@@ -30,6 +30,8 @@ final class RequestStats
      * Raw SQL expression yielding a route's grouping path: the matched
      * route's path, or the shared "Unmatched Route" sentinel when the
      * request never matched a route (route_path is null/empty).
+     *
+     * @return literal-string
      */
     public static function routePathExpr(): string
     {
@@ -39,6 +41,8 @@ final class RequestStats
     /**
      * Same idea as routePathExpr(), but for method - unmatched requests
      * collapse regardless of their actual HTTP method.
+     *
+     * @return literal-string
      */
     public static function routeMethodExpr(): string
     {

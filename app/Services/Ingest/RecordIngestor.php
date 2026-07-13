@@ -70,6 +70,16 @@ class RecordIngestor
             'duration_us' => (int) ($record['duration'] ?? 0),
             'request_size' => (int) ($record['request_size'] ?? 0),
             'response_size' => (int) ($record['response_size'] ?? 0),
+            // Per-stage breakdown of the request lifecycle (see
+            // Laravel\Nightwatch\ExecutionStage) - what the request's
+            // Timeline waterfall is built from.
+            'bootstrap_us' => (int) ($record['bootstrap'] ?? 0),
+            'before_middleware_us' => (int) ($record['before_middleware'] ?? 0),
+            'action_us' => (int) ($record['action'] ?? 0),
+            'render_us' => (int) ($record['render'] ?? 0),
+            'after_middleware_us' => (int) ($record['after_middleware'] ?? 0),
+            'sending_us' => (int) ($record['sending'] ?? 0),
+            'terminating_us' => (int) ($record['terminating'] ?? 0),
             'deploy' => $record['deploy'] ?? null,
             'trace_id' => $record['trace_id'] ?? null,
             'user_external_id' => $this->userExternalId($record),
@@ -96,6 +106,7 @@ class RecordIngestor
             'connection' => $record['connection'] ?? null,
             'connection_type' => $record['connection_type'] ?? null,
             'execution_source' => $record['execution_source'] ?? null,
+            'execution_stage' => $record['execution_stage'] ?? null,
             'trace_id' => $record['trace_id'] ?? null,
             'occurred_at' => $this->timestamp($record),
         ]);
@@ -261,6 +272,7 @@ class RecordIngestor
             'type' => (string) ($record['type'] ?? ''),
             'duration_us' => (int) ($record['duration'] ?? 0),
             'ttl' => (int) ($record['ttl'] ?? 0),
+            'execution_stage' => $record['execution_stage'] ?? null,
             'trace_id' => $record['trace_id'] ?? null,
             'occurred_at' => $this->timestamp($record),
         ]);

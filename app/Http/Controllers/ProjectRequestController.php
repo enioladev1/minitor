@@ -6,6 +6,7 @@ use App\Models\MinitorRequest;
 use App\Models\Project;
 use App\Services\Stats\RequestStats;
 use App\Services\Stats\TimeRange;
+use App\Services\Timeline\RequestTimelineBuilder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -66,7 +67,13 @@ class ProjectRequestController extends Controller
             'requestsSeries' => RequestStats::series($scoped, $range),
             'durationSeries' => RequestStats::durationSeries($scoped, $range),
             'requestStats' => RequestStats::summary($scoped),
-            'routes' => $routesQuery->orderBy($sortColumn, $direction)->paginate(50)->withQueryString(),
+            'routes' => $routesQuery
+                // Unmatched Route is a catch-all bucket, not a real route -
+                // keep it pinned to the bottom regardless of the chosen sort.
+                ->orderByRaw("({$pathExpr} = ?) asc", [RequestStats::UNMATCHED_PATH])
+                ->orderBy($sortColumn, $direction)
+                ->paginate(50)
+                ->withQueryString(),
             'users' => $this->userOptions($project),
         ]);
     }
@@ -146,13 +153,14 @@ class ProjectRequestController extends Controller
         ]);
     }
 
-    public function show(Project $project, MinitorRequest $request): Response
+    public function show(Project $project, MinitorRequest $request, RequestTimelineBuilder $timelineBuilder): Response
     {
         abort_unless($request->project_id === $project->id, 404);
 
         return Inertia::render('projects/requests/Show', [
             'project' => $project,
             'requestRecord' => $request,
+            'timeline' => $timelineBuilder->build($request),
         ]);
     }
 }

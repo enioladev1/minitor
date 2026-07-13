@@ -5,6 +5,7 @@ import { Head, Link } from '@inertiajs/vue3';
 import ProjectController from '@/actions/App/Http/Controllers/ProjectController';
 import { index } from '@/actions/App/Http/Controllers/ProjectRequestController';
 import Heading from '@/components/Heading.vue';
+import RequestTimeline from '@/components/RequestTimeline.vue';
 import SignalDot from '@/components/SignalDot.vue';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -16,6 +17,23 @@ import {
     toneClasses,
 } from '@/lib/signal';
 import { requestPath } from '@/lib/utils';
+
+type TimelineChild = {
+    type: string;
+    label: string;
+    detail: string;
+    offset_us: number;
+    duration_us: number;
+};
+
+type TimelineStage = {
+    key: string;
+    label: string;
+    detail: string | null;
+    offset_us: number;
+    duration_us: number;
+    children: TimelineChild[];
+};
 
 defineProps<{
     project: { id: number; name: string };
@@ -34,6 +52,7 @@ defineProps<{
         trace_id: string | null;
         occurred_at: string;
     };
+    timeline: { total_us: number; stages: TimelineStage[] };
 }>();
 
 defineOptions({
@@ -122,6 +141,8 @@ defineOptions({
                 }}</CardContent>
             </Card>
         </div>
+
+        <RequestTimeline :request-record="requestRecord" :timeline="timeline" />
 
         <Card>
             <CardHeader

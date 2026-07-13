@@ -326,7 +326,8 @@ const isUnmatched =
                         <tr
                             v-for="request in requests.data"
                             :key="request.id"
-                            class="border-b last:border-b-0 hover:bg-muted/50"
+                            class="cursor-pointer border-b last:border-b-0 hover:bg-muted/50"
+                            @click="router.visit(show([project.id, request.id]))"
                         >
                             <td class="py-2 pl-4">
                                 <SignalDot
@@ -337,6 +338,7 @@ const isUnmatched =
                                 <Link
                                     :href="show([project.id, request.id])"
                                     class="font-mono text-xs"
+                                    @click.stop
                                     >{{ request.method }}</Link
                                 >
                             </td>
@@ -344,6 +346,7 @@ const isUnmatched =
                                 <Link
                                     :href="show([project.id, request.id])"
                                     class="block max-w-md truncate font-mono text-xs"
+                                    @click.stop
                                 >
                                     {{ request.route_path || requestPath(request.url) }}
                                 </Link>
