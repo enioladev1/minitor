@@ -1,6 +1,6 @@
 services:
   app:
-    build: .
+    image: ghcr.io/enioladev1/minitor:${MINITOR_VERSION:-latest}
     ports:
       - '${MINITOR_PORT:-8000}:80'
     environment:

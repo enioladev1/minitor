@@ -45,12 +45,14 @@ components:
 
 ## Quick start
 
-1. Stand up the dashboard:
+1. Stand up the dashboard. No source checkout needed - `docker compose` pulls
+   the prebuilt image from GHCR:
 
    ```bash
-   git clone https://github.com/enioladev1/minitor.git
-   cd minitor
-   cp .env.docker.example .env   # fill in APP_KEY, APP_URL & DB_PASSWORD (instructions inside the file)
+   mkdir minitor && cd minitor
+   curl -fsSLO https://raw.githubusercontent.com/enioladev1/minitor/main/docker-compose.yml
+   curl -fsSLo .env https://raw.githubusercontent.com/enioladev1/minitor/main/.env.docker.example
+   # fill in APP_KEY, APP_URL & DB_PASSWORD in .env (instructions inside the file)
    docker compose up -d
    ```
 
@@ -86,6 +88,23 @@ components:
 
 Full agent install/config details:
 [github.com/enioladev1/minitor-agent](https://github.com/enioladev1/minitor-agent).
+
+## Building from source
+
+If you're working on this repo rather than just deploying it, build the
+image locally with the `Dockerfile` instead of pulling from GHCR:
+
+```bash
+git clone https://github.com/enioladev1/minitor.git
+cd minitor
+docker build -t minitor .
+```
+
+Every push to `main` and every `vX.Y.Z` tag also publishes a multi-arch
+(`amd64`/`arm64`) build of this same `Dockerfile` to
+`ghcr.io/enioladev1/minitor` via
+[`.github/workflows/docker-publish.yml`](.github/workflows/docker-publish.yml)
+- that's the image `docker-compose.yml` pulls by default.
 
 ## Run without Docker
 
