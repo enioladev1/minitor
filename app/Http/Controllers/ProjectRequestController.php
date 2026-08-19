@@ -97,24 +97,35 @@ class ProjectRequestController extends Controller
     /**
      * Drill into a single route (method + path): its own charts, filterable
      * by status class / slow requests, and the individual request rows.
+     *
+     * The unmatched-route bucket is a special case: rather than a flat feed
+     * of every unmatched hit (often hundreds of scanner/bot requests from a
+     * handful of IPs), it defaults to one row per IP with aggregate counts.
+     * Clicking an IP (the `ip` filter) drills into that IP's raw requests.
      */
     public function route(Request $request, Project $project): Response
     {
         $method = $request->string('method')->toString();
         $path = $request->string('path')->toString();
+        $isUnmatched = $method === RequestStats::UNMATCHED_METHOD && $path === RequestStats::UNMATCHED_PATH;
 
         $rangeKey = TimeRange::resolve($request);
         $range = new TimeRange($rangeKey);
         $userFilter = $request->string('user')->toString() ?: null;
+        $ipFilter = $isUnmatched ? ($request->string('ip')->toString() ?: null) : null;
 
         $base = $project->requests()->where('occurred_at', '>=', $range->since);
 
-        if ($method === RequestStats::UNMATCHED_METHOD && $path === RequestStats::UNMATCHED_PATH) {
+        if ($isUnmatched) {
             $base->where(function ($q) {
                 $q->whereNull('route_path')->orWhere('route_path', '');
             });
         } else {
             $base->where('method', $method)->where('route_path', $path);
+        }
+
+        if ($ipFilter !== null) {
+            $base->where('ip', $ipFilter);
         }
 
         $scoped = RequestStats::applyUserFilter($base, $userFilter);
@@ -139,16 +150,33 @@ class ProjectRequestController extends Controller
             };
         }
 
+        $groupedByIp = $isUnmatched && $ipFilter === null;
+
+        $requests = $groupedByIp
+            ? $list
+                ->selectRaw('ip')
+                ->selectRaw('count(*) as total')
+                ->selectRaw('count(*) filter (where status_code < 400) as success')
+                ->selectRaw('count(*) filter (where status_code >= 400 and status_code < 500) as client_error')
+                ->selectRaw('count(*) filter (where status_code >= 500) as server_error')
+                ->selectRaw('max(occurred_at) as last_seen_at')
+                ->groupBy('ip')
+                ->orderByDesc('total')
+                ->paginate(50)
+                ->withQueryString()
+            : $list->orderByDesc('occurred_at')->paginate(50)->withQueryString();
+
         return Inertia::render('projects/requests/Route', [
             'project' => $project,
             'method' => $method,
             'path' => $path,
             'range' => $rangeKey,
-            'filters' => $request->only(['status', 'duration', 'user', 'range']),
+            'filters' => $request->only(['status', 'duration', 'user', 'range', 'ip']),
             'requestsSeries' => RequestStats::series($scoped, $range),
             'durationSeries' => RequestStats::durationSeries($scoped, $range),
             'requestStats' => RequestStats::summary($scoped),
-            'requests' => $list->orderByDesc('occurred_at')->paginate(50)->withQueryString(),
+            'requests' => $requests,
+            'groupedByIp' => $groupedByIp,
             'users' => $this->userOptions($project),
         ]);
     }

@@ -2,6 +2,7 @@
 import { ArrowLeft01Icon as ArrowLeft } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/vue';
 import { Head, Link, router } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import ProjectController from '@/actions/App/Http/Controllers/ProjectController';
 import {
     index,
@@ -28,16 +29,28 @@ import { cn, paginationLabel, requestPath } from '@/lib/utils';
 
 type Bucket<T extends string> = { bucket: string } & Record<T, number>;
 
-type PaginatedRequests = {
-    data: Array<{
-        id: number;
-        method: string;
-        route_path: string | null;
-        url: string;
-        status_code: number;
-        duration_us: number;
-        occurred_at: string;
-    }>;
+type RequestRow = {
+    id: number;
+    method: string;
+    route_path: string | null;
+    url: string;
+    ip: string | null;
+    status_code: number;
+    duration_us: number;
+    occurred_at: string;
+};
+
+type IpGroupRow = {
+    ip: string | null;
+    total: number;
+    success: number;
+    client_error: number;
+    server_error: number;
+    last_seen_at: string;
+};
+
+type Paginated<T> = {
+    data: T[];
     links: Array<{ url: string | null; label: string; active: boolean }>;
 };
 
@@ -46,7 +59,7 @@ const props = defineProps<{
     method: string;
     path: string;
     range: string;
-    filters: { status?: string; duration?: string; user?: string };
+    filters: { status?: string; duration?: string; user?: string; ip?: string };
     requestsSeries: Bucket<'success' | 'client_error' | 'server_error'>[];
     durationSeries: Bucket<'avg_us' | 'p95_us'>[];
     requestStats: {
@@ -59,9 +72,13 @@ const props = defineProps<{
         avg_us: number;
         p95_us: number;
     };
-    requests: PaginatedRequests;
+    requests: Paginated<RequestRow> | Paginated<IpGroupRow>;
+    groupedByIp: boolean;
     users: Array<{ external_id: string; label: string }>;
 }>();
+
+const ipRows = computed(() => props.requests.data as IpGroupRow[]);
+const requestRows = computed(() => props.requests.data as RequestRow[]);
 
 defineOptions({
     layout: {
@@ -135,8 +152,19 @@ function setUser(user: string | undefined) {
     navigate({ user });
 }
 
-const isUnmatched =
-    props.method === 'ANY' && props.path === 'Unmatched Route';
+function viewIp(ip: string | null) {
+    if (ip === null) {
+        return;
+    }
+
+    navigate({ ip });
+}
+
+function clearIpFilter() {
+    navigate({ ip: undefined });
+}
+
+const isUnmatched = props.method === 'ANY' && props.path === 'Unmatched Route';
 </script>
 
 <template>
@@ -175,7 +203,9 @@ const isUnmatched =
 
         <div class="grid gap-4 lg:grid-cols-2">
             <div class="rounded-lg border p-4">
-                <div class="mb-3 flex flex-wrap items-start justify-between gap-y-2 text-xs">
+                <div
+                    class="mb-3 flex flex-wrap items-start justify-between gap-y-2 text-xs"
+                >
                     <div>
                         <p class="text-muted-foreground">REQUESTS</p>
                         <p class="font-mono text-xl text-foreground">
@@ -218,7 +248,9 @@ const isUnmatched =
             </div>
 
             <div class="rounded-lg border p-4">
-                <div class="mb-3 flex flex-wrap items-start justify-between gap-y-2 text-xs">
+                <div
+                    class="mb-3 flex flex-wrap items-start justify-between gap-y-2 text-xs"
+                >
                     <div>
                         <p class="text-muted-foreground">DURATION</p>
                         <p class="font-mono text-xl text-foreground">
@@ -264,9 +296,20 @@ const isUnmatched =
         </div>
 
         <div class="flex flex-wrap items-center justify-between gap-3">
-            <p class="text-lg font-semibold">
-                {{ requests.data.length }} Requests
-            </p>
+            <div class="flex flex-wrap items-center gap-2">
+                <p class="text-lg font-semibold">
+                    {{ requests.data.length }}
+                    {{ groupedByIp ? 'IPs' : 'Requests' }}
+                </p>
+                <button
+                    v-if="filters.ip"
+                    type="button"
+                    class="flex items-center gap-1 rounded-md bg-muted px-2 py-1 font-mono text-xs text-muted-foreground hover:text-foreground"
+                    @click="clearIpFilter"
+                >
+                    IP: {{ filters.ip }} &times;
+                </button>
+            </div>
             <div class="flex flex-wrap gap-2">
                 <div class="flex gap-1">
                     <Button
@@ -301,7 +344,78 @@ const isUnmatched =
             </div>
         </div>
 
-        <Card>
+        <Card v-if="groupedByIp">
+            <CardContent class="overflow-x-auto p-0">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr
+                            class="border-b text-left text-xs text-muted-foreground"
+                        >
+                            <th class="py-2 pr-4 pl-4 font-normal">IP</th>
+                            <th class="py-2 pr-4 text-right font-normal">
+                                1/2/3XX
+                            </th>
+                            <th class="py-2 pr-4 text-right font-normal">
+                                4XX
+                            </th>
+                            <th class="py-2 pr-4 text-right font-normal">
+                                5XX
+                            </th>
+                            <th class="py-2 pr-4 text-right font-normal">
+                                Total
+                            </th>
+                            <th class="py-2 pr-4 text-right font-normal">
+                                Last seen
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            v-for="row in ipRows"
+                            :key="row.ip ?? 'unknown'"
+                            class="border-b last:border-b-0 hover:bg-muted/50"
+                            :class="row.ip !== null && 'cursor-pointer'"
+                            @click="viewIp(row.ip)"
+                        >
+                            <td class="py-2 pr-4 pl-4 font-mono text-xs">
+                                {{ row.ip ?? 'Unknown' }}
+                            </td>
+                            <td class="py-2 pr-4 text-right font-mono text-xs">
+                                {{ formatCompactNumber(row.success) }}
+                            </td>
+                            <td
+                                class="py-2 pr-4 text-right font-mono text-xs text-signal-warn"
+                            >
+                                {{ formatCompactNumber(row.client_error) }}
+                            </td>
+                            <td
+                                class="py-2 pr-4 text-right font-mono text-xs text-signal-bad"
+                            >
+                                {{ formatCompactNumber(row.server_error) }}
+                            </td>
+                            <td class="py-2 pr-4 text-right font-mono text-xs">
+                                {{ formatCompactNumber(row.total) }}
+                            </td>
+                            <td
+                                class="py-2 pr-4 text-right text-xs text-muted-foreground"
+                            >
+                                {{ formatDateTime(row.last_seen_at) }}
+                            </td>
+                        </tr>
+                        <tr v-if="ipRows.length === 0">
+                            <td
+                                class="p-4 text-sm text-muted-foreground"
+                                colspan="6"
+                            >
+                                No requests match this filter.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </CardContent>
+        </Card>
+
+        <Card v-else>
             <CardContent class="overflow-x-auto p-0">
                 <table class="w-full text-sm">
                     <thead>
@@ -311,6 +425,12 @@ const isUnmatched =
                             <th class="w-8 py-2 pl-4"></th>
                             <th class="py-2 pr-4 font-normal">Method</th>
                             <th class="py-2 pr-4 font-normal">Details</th>
+                            <th
+                                v-if="isUnmatched"
+                                class="py-2 pr-4 font-normal"
+                            >
+                                IP
+                            </th>
                             <th class="py-2 pr-4 text-right font-normal">
                                 Status
                             </th>
@@ -324,10 +444,12 @@ const isUnmatched =
                     </thead>
                     <tbody>
                         <tr
-                            v-for="request in requests.data"
+                            v-for="request in requestRows"
                             :key="request.id"
                             class="cursor-pointer border-b last:border-b-0 hover:bg-muted/50"
-                            @click="router.visit(show([project.id, request.id]))"
+                            @click="
+                                router.visit(show([project.id, request.id]))
+                            "
                         >
                             <td class="py-2 pl-4">
                                 <SignalDot
@@ -348,8 +470,17 @@ const isUnmatched =
                                     class="block max-w-md truncate font-mono text-xs"
                                     @click.stop
                                 >
-                                    {{ request.route_path || requestPath(request.url) }}
+                                    {{
+                                        request.route_path ||
+                                        requestPath(request.url)
+                                    }}
                                 </Link>
+                            </td>
+                            <td
+                                v-if="isUnmatched"
+                                class="py-2 pr-4 font-mono text-xs"
+                            >
+                                {{ request.ip ?? 'Unknown' }}
                             </td>
                             <td
                                 class="py-2 pr-4 text-right font-mono text-xs"
@@ -375,10 +506,10 @@ const isUnmatched =
                                 {{ formatDateTime(request.occurred_at) }}
                             </td>
                         </tr>
-                        <tr v-if="requests.data.length === 0">
+                        <tr v-if="requestRows.length === 0">
                             <td
                                 class="p-4 text-sm text-muted-foreground"
-                                colspan="6"
+                                :colspan="isUnmatched ? 7 : 6"
                             >
                                 No requests match this filter.
                             </td>
