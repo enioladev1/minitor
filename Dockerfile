@@ -42,6 +42,7 @@ COPY --from=build /app ./
 RUN rm -f .env
 
 # See docker/php-fpm-pool.conf for why clear_env=no matters here.
+COPY docker/php-upload-progress.ini /usr/local/etc/php/conf.d/zz-upload-progress.ini
 COPY docker/php-fpm-pool.conf /usr/local/etc/php-fpm.d/zz-minitor.conf
 COPY docker/nginx.conf /etc/nginx/sites-enabled/default
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
